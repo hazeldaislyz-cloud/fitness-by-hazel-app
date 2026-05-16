@@ -20,7 +20,7 @@ export default async function handler(req, res) {
   }
 
   const buffer = Buffer.from(await response.arrayBuffer());
-  res.setHeader("Content-Type", response.headers.get("content-type") || "image/gif");
+  res.setHeader("Content-Type", "image/gif");
   res.setHeader("Cache-Control", "s-maxage=86400, stale-while-revalidate=604800");
   return res.status(200).send(buffer);
 }

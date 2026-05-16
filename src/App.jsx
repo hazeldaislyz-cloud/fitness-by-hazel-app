@@ -316,7 +316,6 @@ function WorkoutTab(){
   const [checked,setChecked]=useState({});
   const [demo,setDemo]=useState(null);
   const [demoMap,setDemoMap]=useState({});
-  const [demoDebugMap,setDemoDebugMap]=useState({});
   const [demosLoading,setDemosLoading]=useState(false);
   const wk=WEEKS[wi]; const day=wk.days[di];
   const k=`${wi}-${di}`;
@@ -342,14 +341,12 @@ function WorkoutTab(){
         console.log("[WorkoutX] /api/workoutx response", data);
         if(active){
           setDemoMap(data.exercises||{});
-          setDemoDebugMap(data.debug||{});
         }
       })
       .catch(error=>{
         console.error("[WorkoutX] /api/workoutx failed", error);
         if(active){
           setDemoMap({});
-          setDemoDebugMap({});
         }
       })
       .finally(()=>{if(active)setDemosLoading(false);});
@@ -450,7 +447,6 @@ function WorkoutTab(){
             const sets=getSets(ex.s);
             const cue=cueFor(ex);
             const match=demoMap[name];
-            const debug=demoDebugMap[name];
             const proxyGif=match?.id?`/api/workoutx-gif?id=${encodeURIComponent(match.id)}`:null;
             const gif=proxyGif||fallbackDemo(name);
             return(
