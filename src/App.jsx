@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 
 const LOGO_B64 = "data:image/jpeg;base64,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";
 
@@ -29,6 +29,10 @@ const css = `
   .dlvl.on{border-color:#D6A84F;background:#FFF7E5;color:#15172B;}
   .exitem{border-radius:16px;padding:13px 14px;margin-bottom:10px;border:1px solid #E2E8F0;background:#FFFFFF;transition:all 0.18s;cursor:pointer;box-shadow:0 8px 22px #15172B08;}
   .exitem.done{background:#ECFDF3;border-color:#16A34A33;}
+  .demo-img{width:100%;aspect-ratio:16/9;border-radius:14px;object-fit:cover;border:1px solid #E2E8F0;background:#E9FBFB;display:block;}
+  .demo-btn{border:1px solid #00A6A633;background:#E9FBFB;color:#00A6A6;border-radius:999px;padding:8px 12px;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;transition:all 0.18s;}
+  .demo-btn:hover{background:#00A6A6;color:#FFFFFF;}
+  .metric-pill{background:#F7F8FA;border:1px solid #E2E8F0;border-radius:999px;padding:6px 9px;font-size:11px;font-weight:800;color:#15172B;}
   .mitem{background:#FFFFFF;border-radius:16px;padding:14px 15px;margin-bottom:12px;border:1px solid #E2E8F0;border-left:4px solid transparent;transition:border-color 0.2s;box-shadow:0 8px 22px #15172B08;}
   .mitem:hover{border-left-color:#00A6A6;}
   .pbar{background:#E8EEF3;border-radius:999px;height:7px;overflow:hidden;}
@@ -53,26 +57,26 @@ const TYPE={
 };
 
 const EQUIP=[
-  {id:"full",label:"🏋️ Full Setup"},
-  {id:"dbs",label:"🔵 DBs + Bands"},
-  {id:"bands",label:"🟡 Bands Only"},
-  {id:"bw",label:"💪 Bodyweight"},
+  {id:"full",label:"ðŸ‹ï¸ Full Setup"},
+  {id:"dbs",label:"ðŸ”µ DBs + Bands"},
+  {id:"bands",label:"ðŸŸ¡ Bands Only"},
+  {id:"bw",label:"ðŸ’ª Bodyweight"},
 ];
 
 const DIFF=[
-  {id:"beginner",label:"🌱 Beginner",sets:-1,restMod:"+30s",note:"Focus on form"},
-  {id:"intermediate",label:"🔥 Intermediate",sets:0,restMod:"",note:""},
-  {id:"advanced",label:"⚡ Advanced",sets:1,restMod:"-15s",note:"Push heavier"},
+  {id:"beginner",label:"ðŸŒ± Beginner",sets:-1,restMod:"+30s",note:"Focus on form"},
+  {id:"intermediate",label:"ðŸ”¥ Intermediate",sets:0,restMod:"",note:""},
+  {id:"advanced",label:"âš¡ Advanced",sets:1,restMod:"-15s",note:"Push heavier"},
 ];
 
 const SWAP={
   "Barbell Bench Press":{full:"Barbell Bench Press",dbs:"DB Bench Press",bands:"Band Chest Press",bw:"Wide Push-ups"},
-  "Barbell Bent-over Row":{full:"Barbell Bent-over Row",dbs:"DB Bent-over Row",bands:"Band Row",bw:"Superman Hold ×15"},
-  "Barbell Back Squat":{full:"Barbell Back Squat",dbs:"DB Goblet Squat",bands:"Banded Squat",bw:"Bodyweight Squat ×25"},
+  "Barbell Bent-over Row":{full:"Barbell Bent-over Row",dbs:"DB Bent-over Row",bands:"Band Row",bw:"Superman Hold Ã—15"},
+  "Barbell Back Squat":{full:"Barbell Back Squat",dbs:"DB Goblet Squat",bands:"Banded Squat",bw:"Bodyweight Squat Ã—25"},
   "Romanian Deadlift (Barbell)":{full:"Romanian Deadlift (Barbell)",dbs:"DB Romanian Deadlift",bands:"Band RDL",bw:"Single-leg BW RDL"},
   "Romanian Deadlift":{full:"Romanian Deadlift",dbs:"DB Romanian Deadlift",bands:"Band RDL",bw:"Single-leg BW RDL"},
   "Conventional Deadlift":{full:"Conventional Deadlift",dbs:"DB Sumo Deadlift",bands:"Band Deadlift",bw:"Good Mornings BW"},
-  "Barbell Hip Thrust":{full:"Barbell Hip Thrust",dbs:"DB Hip Thrust",bands:"Banded Hip Thrust",bw:"Glute Bridge ×25"},
+  "Barbell Hip Thrust":{full:"Barbell Hip Thrust",dbs:"DB Hip Thrust",bands:"Banded Hip Thrust",bw:"Glute Bridge Ã—25"},
   "Barbell Row":{full:"Barbell Row",dbs:"Dumbbell Row",bands:"Band Row",bw:"Superman Row"},
   "Barbell Overhead Press":{full:"Barbell Overhead Press",dbs:"DB Overhead Press",bands:"Band Overhead Press",bw:"Pike Push-ups"},
   "Dumbbell Overhead Press":{full:"Dumbbell Overhead Press",dbs:"Dumbbell Overhead Press",bands:"Band Overhead Press",bw:"Pike Push-ups"},
@@ -82,176 +86,178 @@ const SWAP={
   "SS1: Barbell Deadlift + Burpee":{full:"SS1: Barbell Deadlift + Burpee",dbs:"SS1: DB Deadlift + Burpee",bands:"SS1: Band Pull-through + Burpee",bw:"SS1: Good Morning + Burpee"},
 };
 const sw=(n,e)=>SWAP[n]?SWAP[n][e]||n:n;
+const demoGif=(name)=>`https://placehold.co/640x360/E9FBFB/15172B.gif?text=${encodeURIComponent(name)}`;
+const cueFor=(ex)=>ex.note||"Move with control and keep steady breathing.";
 
 const WEEKS=[
-  {label:"W1",theme:"Foundation",sub:"Establish baseline · 3 sets · perfect form",intensity:55,days:[
-    {day:"MON",label:"Upper Body Strength",type:"strength",emoji:"💪",
-      warmup:["Arm circles 30s","Band pull-aparts ×15","Shoulder rolls ×10","Push-up hold 30s"],
+  {label:"W1",theme:"Foundation",sub:"Establish baseline Â· 3 sets Â· perfect form",intensity:55,days:[
+    {day:"MON",label:"Upper Body Strength",type:"strength",emoji:"ðŸ’ª",
+      warmup:["Arm circles 30s","Band pull-aparts Ã—15","Shoulder rolls Ã—10","Push-up hold 30s"],
       ex:[{n:"Barbell Bench Press",s:3,r:"10",t:"60s",note:"3-count descent"},{n:"Barbell Bent-over Row",s:3,r:"10",t:"60s",note:"Neutral spine"},{n:"Dumbbell Overhead Press",s:3,r:"10",t:"60s",note:"Engage core"},{n:"Band Lateral Raises",s:3,r:"15",t:"45s",note:"Slow & controlled"},{n:"Tricep Skull Crushers (DB)",s:3,r:"12",t:"45s",note:"Elbows fixed"},{n:"Dumbbell Bicep Curls",s:3,r:"12",t:"45s",note:"Supinate at top"}],
       cd:["Chest doorway stretch 30s","Cross-body shoulder 30s","Child's pose 1 min"]},
-    {day:"TUE",label:"Active Recovery",type:"recovery",emoji:"🧘",warmup:[],
-      ex:[{n:"Yoga / Stretch Flow",s:1,r:"20–25 min",t:"—",note:"This still counts as a session ✓"},{n:"Foam Rolling",s:1,r:"10 min",t:"—",note:"Focus on whatever was sore"},{n:"Light Walk (optional)",s:1,r:"15 min",t:"—",note:""}],cd:[]},
-    {day:"WED",label:"Lower Body Strength",type:"strength",emoji:"🦵",
-      warmup:["Glute bridges ×15","Hip circles 30s","BW squats ×10","Leg swings ×10"],
-      ex:[{n:"Barbell Back Squat",s:3,r:"10",t:"60s",note:"Break parallel, chest up"},{n:"Romanian Deadlift (Barbell)",s:3,r:"12",t:"60s",note:"Push hips back"},{n:"Dumbbell Walking Lunges",s:3,r:"12 each",t:"60s",note:"Long stride"},{n:"Band Glute Kickbacks",s:3,r:"15 each",t:"45s",note:"Squeeze at top"},{n:"Sumo Squat (DB)",s:3,r:"15",t:"45s",note:"Toes out 45°"},{n:"Standing Calf Raises",s:3,r:"20",t:"30s",note:"Pause at top"}],
+    {day:"TUE",label:"Active Recovery",type:"recovery",emoji:"ðŸ§˜",warmup:[],
+      ex:[{n:"Yoga / Stretch Flow",s:1,r:"20â€“25 min",t:"â€”",note:"This still counts as a session âœ“"},{n:"Foam Rolling",s:1,r:"10 min",t:"â€”",note:"Focus on whatever was sore"},{n:"Light Walk (optional)",s:1,r:"15 min",t:"â€”",note:""}],cd:[]},
+    {day:"WED",label:"Lower Body Strength",type:"strength",emoji:"ðŸ¦µ",
+      warmup:["Glute bridges Ã—15","Hip circles 30s","BW squats Ã—10","Leg swings Ã—10"],
+      ex:[{n:"Barbell Back Squat",s:3,r:"10",t:"60s",note:"Break parallel, chest up"},{n:"Romanian Deadlift (Barbell)",s:3,r:"12",t:"60s",note:"Push hips back"},{n:"Dumbbell Walking Lunges",s:3,r:"12 each",t:"60s",note:"Long stride"},{n:"Band Glute Kickbacks",s:3,r:"15 each",t:"45s",note:"Squeeze at top"},{n:"Sumo Squat (DB)",s:3,r:"15",t:"45s",note:"Toes out 45Â°"},{n:"Standing Calf Raises",s:3,r:"20",t:"30s",note:"Pause at top"}],
       cd:["Pigeon pose 1 min each","Hip flexor 45s each","Hamstring stretch 1 min"]},
-    {day:"THU",label:"Active Recovery",type:"recovery",emoji:"🧘",warmup:[],
-      ex:[{n:"Yoga / Mobility Flow",s:1,r:"20–25 min",t:"—",note:"Focus on hips & legs"},{n:"Foam Rolling — lower body",s:1,r:"10 min",t:"—",note:""}],cd:[]},
-    {day:"FRI",label:"Full Body HIIT ⚡",type:"hiit",emoji:"⚡",
-      warmup:["Jumping jacks 1 min","Hip openers 30s","Arm swings 30s","Inchworm ×5"],
-      ex:[{n:"SS1: DB Deadlift + Burpee",s:3,r:"10 + 10",t:"60s",note:"No rest within SS"},{n:"SS2: Push-up + Jump Squat",s:3,r:"12 + 15",t:"60s",note:"Explosive squats"},{n:"SS3: DB Row + Mountain Climbers",s:3,r:"12 + 30s",t:"60s",note:""},{n:"SS4: Overhead Press + High Knees",s:3,r:"10 + 30s",t:"60s",note:""},{n:"AMRAP Finisher — 5 min",s:1,r:"Max rounds",t:"—",note:"5 burpees · 10 squats · 15 high knees"}],
+    {day:"THU",label:"Active Recovery",type:"recovery",emoji:"ðŸ§˜",warmup:[],
+      ex:[{n:"Yoga / Mobility Flow",s:1,r:"20â€“25 min",t:"â€”",note:"Focus on hips & legs"},{n:"Foam Rolling â€” lower body",s:1,r:"10 min",t:"â€”",note:""}],cd:[]},
+    {day:"FRI",label:"Full Body HIIT âš¡",type:"hiit",emoji:"âš¡",
+      warmup:["Jumping jacks 1 min","Hip openers 30s","Arm swings 30s","Inchworm Ã—5"],
+      ex:[{n:"SS1: DB Deadlift + Burpee",s:3,r:"10 + 10",t:"60s",note:"No rest within SS"},{n:"SS2: Push-up + Jump Squat",s:3,r:"12 + 15",t:"60s",note:"Explosive squats"},{n:"SS3: DB Row + Mountain Climbers",s:3,r:"12 + 30s",t:"60s",note:""},{n:"SS4: Overhead Press + High Knees",s:3,r:"10 + 30s",t:"60s",note:""},{n:"AMRAP Finisher â€” 5 min",s:1,r:"Max rounds",t:"â€”",note:"5 burpees Â· 10 squats Â· 15 high knees"}],
       cd:["Cat-cow 1 min","Child's pose 1 min","Spinal twist 1 min each"]},
-    {day:"SAT",label:"Cardio + Core",type:"cardio",emoji:"🏃",
+    {day:"SAT",label:"Cardio + Core",type:"cardio",emoji:"ðŸƒ",
       warmup:["5 min slow walk","Dynamic leg swings"],
-      ex:[{n:"Brisk Walk / Light Jog",s:1,r:"30 min",t:"—",note:"60–70% max HR"},{n:"Core Circuit",s:2,r:"10 each",t:"30s",note:"Plank · bicycle · leg raises · Russian twists"}],
+      ex:[{n:"Brisk Walk / Light Jog",s:1,r:"30 min",t:"â€”",note:"60â€“70% max HR"},{n:"Core Circuit",s:2,r:"10 each",t:"30s",note:"Plank Â· bicycle Â· leg raises Â· Russian twists"}],
       cd:["Full body stretch 10 min","Breathing 3 min"]},
-    {day:"SUN",label:"Rest Day",type:"rest",emoji:"😴",warmup:[],
-      ex:[{n:"Complete Rest",s:1,r:"—",t:"—",note:"Sleep · hydrate · meal prep 🌙"}],cd:[]},
+    {day:"SUN",label:"Rest Day",type:"rest",emoji:"ðŸ˜´",warmup:[],
+      ex:[{n:"Complete Rest",s:1,r:"â€”",t:"â€”",note:"Sleep Â· hydrate Â· meal prep ðŸŒ™"}],cd:[]},
   ]},
-  {label:"W2",theme:"Volume Surge",sub:"Add 1 set · slight weight increase · 5 HIIT rounds",intensity:65,days:[
-    {day:"MON",label:"Upper Body Strength",type:"strength",emoji:"💪",
-      warmup:["Band pull-aparts ×20","Arm circles","Push-up hold 45s"],
-      ex:[{n:"Barbell Bench Press",s:4,r:"10",t:"60s",note:"↑ Weight 2.5kg"},{n:"Barbell Bent-over Row",s:4,r:"10",t:"60s",note:"Squeeze shoulder blades"},{n:"Dumbbell Overhead Press",s:4,r:"10",t:"60s",note:"Add 1–2kg"},{n:"Band Lateral Raises",s:4,r:"15",t:"45s",note:"Heavier band or 3s slow"},{n:"Tricep Skull Crushers (DB)",s:4,r:"12",t:"45s",note:""},{n:"Hammer Curls (DB)",s:4,r:"12",t:"45s",note:"Neutral grip"}],
+  {label:"W2",theme:"Volume Surge",sub:"Add 1 set Â· slight weight increase Â· 5 HIIT rounds",intensity:65,days:[
+    {day:"MON",label:"Upper Body Strength",type:"strength",emoji:"ðŸ’ª",
+      warmup:["Band pull-aparts Ã—20","Arm circles","Push-up hold 45s"],
+      ex:[{n:"Barbell Bench Press",s:4,r:"10",t:"60s",note:"â†‘ Weight 2.5kg"},{n:"Barbell Bent-over Row",s:4,r:"10",t:"60s",note:"Squeeze shoulder blades"},{n:"Dumbbell Overhead Press",s:4,r:"10",t:"60s",note:"Add 1â€“2kg"},{n:"Band Lateral Raises",s:4,r:"15",t:"45s",note:"Heavier band or 3s slow"},{n:"Tricep Skull Crushers (DB)",s:4,r:"12",t:"45s",note:""},{n:"Hammer Curls (DB)",s:4,r:"12",t:"45s",note:"Neutral grip"}],
       cd:["Shoulder/chest stretch 10 min"]},
-    {day:"TUE",label:"Active Recovery",type:"recovery",emoji:"🧘",warmup:[],
-      ex:[{n:"Yoga Flow",s:1,r:"25 min",t:"—",note:""},{n:"Foam Rolling",s:1,r:"15 min",t:"—",note:""}],cd:[]},
-    {day:"WED",label:"Lower Body Strength",type:"strength",emoji:"🦵",
-      warmup:["Glute bridges ×20","Banded clamshells ×15","BW squats ×15"],
-      ex:[{n:"Barbell Back Squat",s:4,r:"10",t:"60s",note:"↑ 2.5–5kg"},{n:"Romanian Deadlift",s:4,r:"12",t:"60s",note:""},{n:"Dumbbell Walking Lunges",s:4,r:"12 each",t:"60s",note:"Heavier DBs"},{n:"Single-leg RDL (DB)",s:3,r:"10 each",t:"45s",note:"NEW — balance + glutes"},{n:"Band Glute Kickbacks",s:4,r:"15 each",t:"45s",note:""},{n:"Weighted Calf Raises",s:4,r:"20",t:"30s",note:"Hold DBs"}],
-      cd:["Pigeon · figure-4 · hamstring 12 min"]},
-    {day:"THU",label:"Active Recovery",type:"recovery",emoji:"🧘",warmup:[],
-      ex:[{n:"Yoga / Mobility",s:1,r:"25 min",t:"—",note:""},{n:"Foam Roll + Stretch",s:1,r:"15 min",t:"—",note:""}],cd:[]},
-    {day:"FRI",label:"Full Body HIIT ⚡",type:"hiit",emoji:"⚡",
+    {day:"TUE",label:"Active Recovery",type:"recovery",emoji:"ðŸ§˜",warmup:[],
+      ex:[{n:"Yoga Flow",s:1,r:"25 min",t:"â€”",note:""},{n:"Foam Rolling",s:1,r:"15 min",t:"â€”",note:""}],cd:[]},
+    {day:"WED",label:"Lower Body Strength",type:"strength",emoji:"ðŸ¦µ",
+      warmup:["Glute bridges Ã—20","Banded clamshells Ã—15","BW squats Ã—15"],
+      ex:[{n:"Barbell Back Squat",s:4,r:"10",t:"60s",note:"â†‘ 2.5â€“5kg"},{n:"Romanian Deadlift",s:4,r:"12",t:"60s",note:""},{n:"Dumbbell Walking Lunges",s:4,r:"12 each",t:"60s",note:"Heavier DBs"},{n:"Single-leg RDL (DB)",s:3,r:"10 each",t:"45s",note:"NEW â€” balance + glutes"},{n:"Band Glute Kickbacks",s:4,r:"15 each",t:"45s",note:""},{n:"Weighted Calf Raises",s:4,r:"20",t:"30s",note:"Hold DBs"}],
+      cd:["Pigeon Â· figure-4 Â· hamstring 12 min"]},
+    {day:"THU",label:"Active Recovery",type:"recovery",emoji:"ðŸ§˜",warmup:[],
+      ex:[{n:"Yoga / Mobility",s:1,r:"25 min",t:"â€”",note:""},{n:"Foam Roll + Stretch",s:1,r:"15 min",t:"â€”",note:""}],cd:[]},
+    {day:"FRI",label:"Full Body HIIT âš¡",type:"hiit",emoji:"âš¡",
       warmup:["Full dynamic warmup 7 min"],
-      ex:[{n:"SS1: Barbell Deadlift + Burpee",s:4,r:"8 + 10",t:"60s",note:"Barbell replaces DB"},{n:"SS2: Decline Push-up + Jump Squat",s:4,r:"15 + 15",t:"60s",note:""},{n:"SS3: DB Row + Mountain Climbers",s:4,r:"10 + 40s",t:"60s",note:""},{n:"SS4: Arnold Press + High Knees",s:4,r:"10 + 40s",t:"60s",note:"NEW press variation"},{n:"AMRAP Finisher — 6 min",s:1,r:"Max rounds",t:"—",note:"5 burpees · 10 squats · 15 high knees"}],
+      ex:[{n:"SS1: Barbell Deadlift + Burpee",s:4,r:"8 + 10",t:"60s",note:"Barbell replaces DB"},{n:"SS2: Decline Push-up + Jump Squat",s:4,r:"15 + 15",t:"60s",note:""},{n:"SS3: DB Row + Mountain Climbers",s:4,r:"10 + 40s",t:"60s",note:""},{n:"SS4: Arnold Press + High Knees",s:4,r:"10 + 40s",t:"60s",note:"NEW press variation"},{n:"AMRAP Finisher â€” 6 min",s:1,r:"Max rounds",t:"â€”",note:"5 burpees Â· 10 squats Â· 15 high knees"}],
       cd:["Full body cool-down 10 min"]},
-    {day:"SAT",label:"Cardio + Core",type:"cardio",emoji:"🏃",
+    {day:"SAT",label:"Cardio + Core",type:"cardio",emoji:"ðŸƒ",
       warmup:["5 min slow warm-up"],
-      ex:[{n:"Brisk Walk / Light Jog",s:1,r:"40 min",t:"—",note:"↑ 10 min"},{n:"Core Circuit",s:3,r:"12 each",t:"30s",note:"Plank · bicycle · leg raises · Russian twists"}],
+      ex:[{n:"Brisk Walk / Light Jog",s:1,r:"40 min",t:"â€”",note:"â†‘ 10 min"},{n:"Core Circuit",s:3,r:"12 each",t:"30s",note:"Plank Â· bicycle Â· leg raises Â· Russian twists"}],
       cd:["Static stretch + breathing 10 min"]},
-    {day:"SUN",label:"Rest Day",type:"rest",emoji:"😴",warmup:[],
-      ex:[{n:"Complete Rest",s:1,r:"—",t:"—",note:"Sleep & nutrition prep 🌙"}],cd:[]},
+    {day:"SUN",label:"Rest Day",type:"rest",emoji:"ðŸ˜´",warmup:[],
+      ex:[{n:"Complete Rest",s:1,r:"â€”",t:"â€”",note:"Sleep & nutrition prep ðŸŒ™"}],cd:[]},
   ]},
-  {label:"W3",theme:"Intensity Peak",sub:"↑ Load 5–10% · Rest ↓ 45s · Tabata HIIT",intensity:80,days:[
-    {day:"MON",label:"Upper Body — Heavy",type:"strength",emoji:"💪",
+  {label:"W3",theme:"Intensity Peak",sub:"â†‘ Load 5â€“10% Â· Rest â†“ 45s Â· Tabata HIIT",intensity:80,days:[
+    {day:"MON",label:"Upper Body â€” Heavy",type:"strength",emoji:"ðŸ’ª",
       warmup:["Thoracic rotations","Band warm-up","Push-up activation"],
-      ex:[{n:"Barbell Bench Press",s:4,r:"8",t:"45s",note:"↑ Weight ↓ Reps = more intensity"},{n:"Barbell Row",s:4,r:"8",t:"45s",note:""},{n:"Barbell Overhead Press",s:4,r:"8",t:"45s",note:"Push heavier"},{n:"Band Face Pulls",s:4,r:"20",t:"30s",note:"NEW — rear delt"},{n:"Close-grip Barbell Press",s:4,r:"10",t:"45s",note:"NEW compound tricep"},{n:"Barbell Curl",s:4,r:"10",t:"45s",note:"3-count negative"}],
+      ex:[{n:"Barbell Bench Press",s:4,r:"8",t:"45s",note:"â†‘ Weight â†“ Reps = more intensity"},{n:"Barbell Row",s:4,r:"8",t:"45s",note:""},{n:"Barbell Overhead Press",s:4,r:"8",t:"45s",note:"Push heavier"},{n:"Band Face Pulls",s:4,r:"20",t:"30s",note:"NEW â€” rear delt"},{n:"Close-grip Barbell Press",s:4,r:"10",t:"45s",note:"NEW compound tricep"},{n:"Barbell Curl",s:4,r:"10",t:"45s",note:"3-count negative"}],
       cd:["Shoulder + chest mobility 10 min"]},
-    {day:"TUE",label:"Active Recovery",type:"recovery",emoji:"🧘",warmup:[],
-      ex:[{n:"Yoga Flow",s:1,r:"30 min",t:"—",note:"Go deeper"},{n:"Foam Rolling",s:1,r:"15 min",t:"—",note:"IT band, quads, lats"}],cd:[]},
-    {day:"WED",label:"Lower Body — Power",type:"strength",emoji:"🦵",
-      warmup:["Banded: 3×15 glute bridges · clamshells · monster walks"],
-      ex:[{n:"Barbell Back Squat",s:4,r:"8",t:"45s",note:"Heavy"},{n:"Conventional Deadlift",s:4,r:"8",t:"60s",note:"NEW full deadlift"},{n:"Barbell Hip Thrust",s:4,r:"12",t:"45s",note:"NEW — mat under shoulders"},{n:"Bulgarian Split Squat (DB)",s:3,r:"10 each",t:"45s",note:"NEW — most demanding"},{n:"Banded Standing Abduction",s:3,r:"20 each",t:"30s",note:""},{n:"Explosive Jump Squats (BW)",s:3,r:"15",t:"30s",note:"Finisher"}],
-      cd:["Hip flexor · hamstring · glute 12 min"]},
-    {day:"THU",label:"Active Recovery",type:"recovery",emoji:"🧘",warmup:[],
-      ex:[{n:"Yoga + Mobility",s:1,r:"30 min",t:"—",note:""},{n:"Foam Rolling",s:1,r:"15 min",t:"—",note:""}],cd:[]},
-    {day:"FRI",label:"Tabata HIIT ⚡",type:"hiit",emoji:"⚡",
+    {day:"TUE",label:"Active Recovery",type:"recovery",emoji:"ðŸ§˜",warmup:[],
+      ex:[{n:"Yoga Flow",s:1,r:"30 min",t:"â€”",note:"Go deeper"},{n:"Foam Rolling",s:1,r:"15 min",t:"â€”",note:"IT band, quads, lats"}],cd:[]},
+    {day:"WED",label:"Lower Body â€” Power",type:"strength",emoji:"ðŸ¦µ",
+      warmup:["Banded: 3Ã—15 glute bridges Â· clamshells Â· monster walks"],
+      ex:[{n:"Barbell Back Squat",s:4,r:"8",t:"45s",note:"Heavy"},{n:"Conventional Deadlift",s:4,r:"8",t:"60s",note:"NEW full deadlift"},{n:"Barbell Hip Thrust",s:4,r:"12",t:"45s",note:"NEW â€” mat under shoulders"},{n:"Bulgarian Split Squat (DB)",s:3,r:"10 each",t:"45s",note:"NEW â€” most demanding"},{n:"Banded Standing Abduction",s:3,r:"20 each",t:"30s",note:""},{n:"Explosive Jump Squats (BW)",s:3,r:"15",t:"30s",note:"Finisher"}],
+      cd:["Hip flexor Â· hamstring Â· glute 12 min"]},
+    {day:"THU",label:"Active Recovery",type:"recovery",emoji:"ðŸ§˜",warmup:[],
+      ex:[{n:"Yoga + Mobility",s:1,r:"30 min",t:"â€”",note:""},{n:"Foam Rolling",s:1,r:"15 min",t:"â€”",note:""}],cd:[]},
+    {day:"FRI",label:"Tabata HIIT âš¡",type:"hiit",emoji:"âš¡",
       warmup:["8 min full dynamic warm-up"],
-      ex:[{n:"TABATA: 20s on / 10s off × 8 rounds per block",s:8,r:"20s / 10s",t:"1.5 min between",note:"4 min per block"},{n:"Block 1 — Burpees",s:8,r:"20s / 10s",t:"",note:""},{n:"Block 2 — Jump Squats",s:8,r:"20s / 10s",t:"",note:""},{n:"Block 3 — Mountain Climbers",s:8,r:"20s / 10s",t:"",note:""},{n:"Block 4 — High Knees",s:8,r:"20s / 10s",t:"—",note:"Max effort every interval"}],
+      ex:[{n:"TABATA: 20s on / 10s off Ã— 8 rounds per block",s:8,r:"20s / 10s",t:"1.5 min between",note:"4 min per block"},{n:"Block 1 â€” Burpees",s:8,r:"20s / 10s",t:"",note:""},{n:"Block 2 â€” Jump Squats",s:8,r:"20s / 10s",t:"",note:""},{n:"Block 3 â€” Mountain Climbers",s:8,r:"20s / 10s",t:"",note:""},{n:"Block 4 â€” High Knees",s:8,r:"20s / 10s",t:"â€”",note:"Max effort every interval"}],
       cd:["Full body stretch 12 min"]},
-    {day:"SAT",label:"Cardio + Core",type:"cardio",emoji:"🏃",
+    {day:"SAT",label:"Cardio + Core",type:"cardio",emoji:"ðŸƒ",
       warmup:["5 min slow walk"],
-      ex:[{n:"Jog / Power Walk Intervals",s:1,r:"40 min",t:"—",note:"3 min jog + 2 min walk"},{n:"Core Superset",s:4,r:"15 each",t:"20s",note:"Plank · bicycle · leg raise · Russian twist"}],
+      ex:[{n:"Jog / Power Walk Intervals",s:1,r:"40 min",t:"â€”",note:"3 min jog + 2 min walk"},{n:"Core Superset",s:4,r:"15 each",t:"20s",note:"Plank Â· bicycle Â· leg raise Â· Russian twist"}],
       cd:["Static stretch + breathing 12 min"]},
-    {day:"SUN",label:"Rest Day",type:"rest",emoji:"😴",warmup:[],
-      ex:[{n:"Complete Rest",s:1,r:"—",t:"—",note:"Ice sore areas. Meal prep. 🌙"}],cd:[]},
+    {day:"SUN",label:"Rest Day",type:"rest",emoji:"ðŸ˜´",warmup:[],
+      ex:[{n:"Complete Rest",s:1,r:"â€”",t:"â€”",note:"Ice sore areas. Meal prep. ðŸŒ™"}],cd:[]},
   ]},
-  {label:"W4",theme:"Peak & Consolidate",sub:"5 sets · max load · push every session",intensity:95,days:[
-    {day:"MON",label:"Upper Body — Max Effort",type:"strength",emoji:"💪",
+  {label:"W4",theme:"Peak & Consolidate",sub:"5 sets Â· max load Â· push every session",intensity:95,days:[
+    {day:"MON",label:"Upper Body â€” Max Effort",type:"strength",emoji:"ðŸ’ª",
       warmup:["Full shoulder mobility + band warm-up"],
-      ex:[{n:"Barbell Bench Press",s:5,r:"8–10",t:"45s",note:"Peak weight of 4-week cycle"},{n:"Barbell Row",s:5,r:"8–10",t:"45s",note:"Go heavy"},{n:"Barbell Overhead Press",s:5,r:"8",t:"45s",note:""},{n:"Band Superset: Face Pulls + Lateral Raises",s:4,r:"20 + 15",t:"30s",note:"No rest between"},{n:"Giant Set: Skull Crushers + Curls + Hammer Curls",s:4,r:"12 each",t:"60s",note:"No rest between moves"}],
+      ex:[{n:"Barbell Bench Press",s:5,r:"8â€“10",t:"45s",note:"Peak weight of 4-week cycle"},{n:"Barbell Row",s:5,r:"8â€“10",t:"45s",note:"Go heavy"},{n:"Barbell Overhead Press",s:5,r:"8",t:"45s",note:""},{n:"Band Superset: Face Pulls + Lateral Raises",s:4,r:"20 + 15",t:"30s",note:"No rest between"},{n:"Giant Set: Skull Crushers + Curls + Hammer Curls",s:4,r:"12 each",t:"60s",note:"No rest between moves"}],
       cd:["Upper body stretch 10 min"]},
-    {day:"TUE",label:"Active Recovery",type:"recovery",emoji:"🧘",warmup:[],
-      ex:[{n:"Yoga + Deep Mobility",s:1,r:"35 min",t:"—",note:"Hold each pose longer"},{n:"Box breathing",s:1,r:"10 min",t:"—",note:"Inhale 4 · hold 4 · exhale 4 · hold 4"}],cd:[]},
-    {day:"WED",label:"Lower Body — Peak Load",type:"strength",emoji:"🦵",
+    {day:"TUE",label:"Active Recovery",type:"recovery",emoji:"ðŸ§˜",warmup:[],
+      ex:[{n:"Yoga + Deep Mobility",s:1,r:"35 min",t:"â€”",note:"Hold each pose longer"},{n:"Box breathing",s:1,r:"10 min",t:"â€”",note:"Inhale 4 Â· hold 4 Â· exhale 4 Â· hold 4"}],cd:[]},
+    {day:"WED",label:"Lower Body â€” Peak Load",type:"strength",emoji:"ðŸ¦µ",
       warmup:["Full glute + hip activation 10 min"],
-      ex:[{n:"Barbell Back Squat",s:5,r:"8",t:"60s",note:"Heaviest squat of 4 weeks"},{n:"Conventional Deadlift",s:5,r:"6–8",t:"60s",note:"Peak load — brace hard"},{n:"Barbell Hip Thrust",s:4,r:"12",t:"45s",note:""},{n:"Bulgarian Split Squat (DB)",s:4,r:"12 each",t:"45s",note:"↑ Weight vs W3"},{n:"Plyometric Lunges",s:3,r:"20 (10 each)",t:"30s",note:"Explosive finisher"},{n:"Single-leg Calf Raise (weighted)",s:3,r:"15 each",t:"30s",note:""}],
+      ex:[{n:"Barbell Back Squat",s:5,r:"8",t:"60s",note:"Heaviest squat of 4 weeks"},{n:"Conventional Deadlift",s:5,r:"6â€“8",t:"60s",note:"Peak load â€” brace hard"},{n:"Barbell Hip Thrust",s:4,r:"12",t:"45s",note:""},{n:"Bulgarian Split Squat (DB)",s:4,r:"12 each",t:"45s",note:"â†‘ Weight vs W3"},{n:"Plyometric Lunges",s:3,r:"20 (10 each)",t:"30s",note:"Explosive finisher"},{n:"Single-leg Calf Raise (weighted)",s:3,r:"15 each",t:"30s",note:""}],
       cd:["Deep lower body stretch 15 min"]},
-    {day:"THU",label:"Active Recovery",type:"recovery",emoji:"🧘",warmup:[],
-      ex:[{n:"Yoga + Mobility",s:1,r:"35 min",t:"—",note:""},{n:"Foam Rolling — full body",s:1,r:"15 min",t:"—",note:""}],cd:[]},
-    {day:"FRI",label:"Peak HIIT Circuit ⚡",type:"hiit",emoji:"⚡",
+    {day:"THU",label:"Active Recovery",type:"recovery",emoji:"ðŸ§˜",warmup:[],
+      ex:[{n:"Yoga + Mobility",s:1,r:"35 min",t:"â€”",note:""},{n:"Foam Rolling â€” full body",s:1,r:"15 min",t:"â€”",note:""}],cd:[]},
+    {day:"FRI",label:"Peak HIIT Circuit âš¡",type:"hiit",emoji:"âš¡",
       warmup:["10 min full warm-up"],
-      ex:[{n:"CIRCUIT: 6 rounds · 45s on / 15s off",s:6,r:"45s / 15s",t:"90s between",note:"Hardest HIIT of 4 weeks"},{n:"Burpees",s:6,r:"45s",t:"",note:""},{n:"Jump Squats",s:6,r:"45s",t:"",note:""},{n:"Mountain Climbers",s:6,r:"45s",t:"",note:""},{n:"High Knees",s:6,r:"45s",t:"",note:""},{n:"Plank to Push-up",s:6,r:"45s",t:"",note:""},{n:"Jump Lunges",s:6,r:"45s",t:"",note:""}],
-      cd:["15 min full body cool-down 🎉"]},
-    {day:"SAT",label:"Active Cardio + Reflect",type:"cardio",emoji:"🏃",
+      ex:[{n:"CIRCUIT: 6 rounds Â· 45s on / 15s off",s:6,r:"45s / 15s",t:"90s between",note:"Hardest HIIT of 4 weeks"},{n:"Burpees",s:6,r:"45s",t:"",note:""},{n:"Jump Squats",s:6,r:"45s",t:"",note:""},{n:"Mountain Climbers",s:6,r:"45s",t:"",note:""},{n:"High Knees",s:6,r:"45s",t:"",note:""},{n:"Plank to Push-up",s:6,r:"45s",t:"",note:""},{n:"Jump Lunges",s:6,r:"45s",t:"",note:""}],
+      cd:["15 min full body cool-down ðŸŽ‰"]},
+    {day:"SAT",label:"Active Cardio + Reflect",type:"cardio",emoji:"ðŸƒ",
       warmup:["5 min easy walk"],
-      ex:[{n:"Long Walk or Jog",s:1,r:"45–50 min",t:"—",note:"Reflect on your 4 weeks 💭"},{n:"Core Work",s:3,r:"Max reps",t:"30s",note:"Plank · hollow hold · dead bug"}],
-      cd:["20 min deep static stretch 🌸"]},
-    {day:"SUN",label:"Rest + Reassess",type:"rest",emoji:"😴",warmup:[],
-      ex:[{n:"Rest + Reassess",s:1,r:"—",t:"—",note:"Weigh in · measure · celebrate · plan next cycle 📏"}],cd:[]},
+      ex:[{n:"Long Walk or Jog",s:1,r:"45â€“50 min",t:"â€”",note:"Reflect on your 4 weeks ðŸ’­"},{n:"Core Work",s:3,r:"Max reps",t:"30s",note:"Plank Â· hollow hold Â· dead bug"}],
+      cd:["20 min deep static stretch ðŸŒ¸"]},
+    {day:"SUN",label:"Rest + Reassess",type:"rest",emoji:"ðŸ˜´",warmup:[],
+      ex:[{n:"Rest + Reassess",s:1,r:"â€”",t:"â€”",note:"Weigh in Â· measure Â· celebrate Â· plan next cycle ðŸ“"}],cd:[]},
   ]},
 ];
 
 const MEALS=[
   {day:"MON",label:"Training",type:"train",kcal:1700,p:96,c:178,f:50,items:[
-    {t:"6:30 AM",l:"Pre-Workout ⚡",kcal:110,p:1,c:28,f:0,foods:["1 banana","Black coffee or unsweetened tea"],note:"Light fuel — never train empty"},
-    {t:"9:30 AM",l:"Post-Workout Breakfast 🍳",kcal:480,p:28,c:32,f:24,foods:["3 boiled/scrambled eggs","2 slices wholemeal toast","½ avocado","Tomato & onion salsa"],note:"Protein within 45 min of finishing"},
-    {t:"12:30 PM",l:"Lunch 🍛",kcal:490,p:40,c:42,f:10,foods:["Grilled chicken breast ~150g","½ cup brown rice","Sukuma wiki in 1 tsp coconut oil","Tomato & cucumber side"],note:""},
-    {t:"3:30 PM",l:"Snack 🥜",kcal:200,p:7,c:18,f:12,foods:["Handful groundnuts ~25g","1 orange or 2 passion fruits"],note:""},
-    {t:"7:00 PM",l:"Dinner 🍲",kcal:420,p:20,c:58,f:4,foods:["Dengu stew — 1 cup","1 medium sweet potato","Steamed spinach or cabbage"],note:"Plant protein + complex carbs overnight"},
+    {t:"6:30 AM",l:"Pre-Workout âš¡",kcal:110,p:1,c:28,f:0,foods:["1 banana","Black coffee or unsweetened tea"],note:"Light fuel â€” never train empty"},
+    {t:"9:30 AM",l:"Post-Workout Breakfast ðŸ³",kcal:480,p:28,c:32,f:24,foods:["3 boiled/scrambled eggs","2 slices wholemeal toast","Â½ avocado","Tomato & onion salsa"],note:"Protein within 45 min of finishing"},
+    {t:"12:30 PM",l:"Lunch ðŸ›",kcal:490,p:40,c:42,f:10,foods:["Grilled chicken breast ~150g","Â½ cup brown rice","Sukuma wiki in 1 tsp coconut oil","Tomato & cucumber side"],note:""},
+    {t:"3:30 PM",l:"Snack ðŸ¥œ",kcal:200,p:7,c:18,f:12,foods:["Handful groundnuts ~25g","1 orange or 2 passion fruits"],note:""},
+    {t:"7:00 PM",l:"Dinner ðŸ²",kcal:420,p:20,c:58,f:4,foods:["Dengu stew â€” 1 cup","1 medium sweet potato","Steamed spinach or cabbage"],note:"Plant protein + complex carbs overnight"},
   ]},
   {day:"TUE",label:"Rest",type:"rest",kcal:1390,p:73,c:134,f:46,items:[
-    {t:"7:30 AM",l:"Breakfast 🌿",kcal:370,p:12,c:50,f:12,foods:["Oats with 1 tbsp peanut butter","½ banana","Black coffee or herbal tea"],note:"Rest days need less"},
-    {t:"11:00 AM",l:"Snack 🍊",kcal:130,p:3,c:18,f:5,foods:["1 orange or 2 passion fruits","10g groundnuts"],note:""},
-    {t:"1:00 PM",l:"Lunch 🥗",kcal:380,p:18,c:28,f:18,foods:["Large salad + 2 boiled eggs","Lemon + olive oil dressing","1 slice wholemeal bread"],note:"Lower-carb day"},
-    {t:"4:00 PM",l:"Snack 🥛",kcal:130,p:8,c:14,f:2,foods:["1 cup plain low-fat yoghurt"],note:""},
-    {t:"7:00 PM",l:"Dinner 🍲",kcal:380,p:32,c:24,f:9,foods:["Chicken vegetable soup","1 slice wholemeal bread"],note:"Light nourishing dinner"},
+    {t:"7:30 AM",l:"Breakfast ðŸŒ¿",kcal:370,p:12,c:50,f:12,foods:["Oats with 1 tbsp peanut butter","Â½ banana","Black coffee or herbal tea"],note:"Rest days need less"},
+    {t:"11:00 AM",l:"Snack ðŸŠ",kcal:130,p:3,c:18,f:5,foods:["1 orange or 2 passion fruits","10g groundnuts"],note:""},
+    {t:"1:00 PM",l:"Lunch ðŸ¥—",kcal:380,p:18,c:28,f:18,foods:["Large salad + 2 boiled eggs","Lemon + olive oil dressing","1 slice wholemeal bread"],note:"Lower-carb day"},
+    {t:"4:00 PM",l:"Snack ðŸ¥›",kcal:130,p:8,c:14,f:2,foods:["1 cup plain low-fat yoghurt"],note:""},
+    {t:"7:00 PM",l:"Dinner ðŸ²",kcal:380,p:32,c:24,f:9,foods:["Chicken vegetable soup","1 slice wholemeal bread"],note:"Light nourishing dinner"},
   ]},
   {day:"WED",label:"Training",type:"train",kcal:1660,p:111,c:166,f:43,items:[
-    {t:"6:30 AM",l:"Pre-Workout ⚡",kcal:160,p:5,c:30,f:2,foods:["½ cup oats/uji with water","1 tsp honey","Black coffee"],note:"Slow-release carbs for heavy legs"},
-    {t:"9:30 AM",l:"Post-Workout Breakfast 🍳",kcal:430,p:32,c:30,f:16,foods:["2 eggs + 1 cup soya mince stir-fry","1 slice wholemeal bread","½ cup pawpaw"],note:"Soya mince — affordable & high-protein"},
-    {t:"12:30 PM",l:"Lunch 🍛",kcal:490,p:22,c:68,f:8,foods:["Maharagwe stew — 1 cup","Brown rice — ½ cup","Steamed sukuma wiki","Sliced tomato"],note:"High-carb fuels leg day"},
-    {t:"3:30 PM",l:"Snack 🥑",kcal:200,p:3,c:14,f:14,foods:["½ avocado on 1 rice cake","10 cherry tomatoes"],note:""},
-    {t:"7:00 PM",l:"Dinner 🐟",kcal:380,p:49,c:24,f:3,foods:["Tilapia grilled 200g","Steamed carrots & courgette","½ cup brown rice"],note:""},
+    {t:"6:30 AM",l:"Pre-Workout âš¡",kcal:160,p:5,c:30,f:2,foods:["Â½ cup oats/uji with water","1 tsp honey","Black coffee"],note:"Slow-release carbs for heavy legs"},
+    {t:"9:30 AM",l:"Post-Workout Breakfast ðŸ³",kcal:430,p:32,c:30,f:16,foods:["2 eggs + 1 cup soya mince stir-fry","1 slice wholemeal bread","Â½ cup pawpaw"],note:"Soya mince â€” affordable & high-protein"},
+    {t:"12:30 PM",l:"Lunch ðŸ›",kcal:490,p:22,c:68,f:8,foods:["Maharagwe stew â€” 1 cup","Brown rice â€” Â½ cup","Steamed sukuma wiki","Sliced tomato"],note:"High-carb fuels leg day"},
+    {t:"3:30 PM",l:"Snack ðŸ¥‘",kcal:200,p:3,c:14,f:14,foods:["Â½ avocado on 1 rice cake","10 cherry tomatoes"],note:""},
+    {t:"7:00 PM",l:"Dinner ðŸŸ",kcal:380,p:49,c:24,f:3,foods:["Tilapia grilled 200g","Steamed carrots & courgette","Â½ cup brown rice"],note:""},
   ]},
   {day:"THU",label:"Rest",type:"rest",kcal:1390,p:73,c:134,f:46,items:[
-    {t:"7:30 AM",l:"Breakfast 🌿",kcal:370,p:12,c:50,f:12,foods:["Oats with peanut butter + banana","Black tea or coffee"],note:""},
-    {t:"11:00 AM",l:"Snack 🍊",kcal:130,p:3,c:18,f:5,foods:["Fresh fruit","10g groundnuts"],note:""},
-    {t:"1:00 PM",l:"Lunch 🥗",kcal:380,p:18,c:28,f:18,foods:["Mixed salad bowl + 2 boiled eggs","Lemon + olive oil dressing","1 slice wholemeal bread"],note:""},
-    {t:"4:00 PM",l:"Snack 🥛",kcal:130,p:8,c:14,f:2,foods:["1 cup plain low-fat yoghurt"],note:""},
-    {t:"7:00 PM",l:"Dinner 🍲",kcal:380,p:32,c:24,f:9,foods:["Lentil or chicken soup — broth-based","1 slice wholemeal bread"],note:"Light dinner = better sleep"},
+    {t:"7:30 AM",l:"Breakfast ðŸŒ¿",kcal:370,p:12,c:50,f:12,foods:["Oats with peanut butter + banana","Black tea or coffee"],note:""},
+    {t:"11:00 AM",l:"Snack ðŸŠ",kcal:130,p:3,c:18,f:5,foods:["Fresh fruit","10g groundnuts"],note:""},
+    {t:"1:00 PM",l:"Lunch ðŸ¥—",kcal:380,p:18,c:28,f:18,foods:["Mixed salad bowl + 2 boiled eggs","Lemon + olive oil dressing","1 slice wholemeal bread"],note:""},
+    {t:"4:00 PM",l:"Snack ðŸ¥›",kcal:130,p:8,c:14,f:2,foods:["1 cup plain low-fat yoghurt"],note:""},
+    {t:"7:00 PM",l:"Dinner ðŸ²",kcal:380,p:32,c:24,f:9,foods:["Lentil or chicken soup â€” broth-based","1 slice wholemeal bread"],note:"Light dinner = better sleep"},
   ]},
   {day:"FRI",label:"Big Training Day",type:"train",kcal:1720,p:104,c:166,f:57,items:[
-    {t:"6:30 AM",l:"Pre-Workout ⚡",kcal:160,p:5,c:30,f:2,foods:["½ cup oats + 1 tsp honey","Black coffee"],note:"Most intense day — load up"},
-    {t:"9:30 AM",l:"Post-Workout Breakfast 🍳",kcal:480,p:34,c:6,f:30,foods:["3 scrambled eggs + 2 chicken sausages","½ avocado"],note:"Low-carb post-HIIT = burn stored fat"},
-    {t:"12:30 PM",l:"Lunch 🍛",kcal:510,p:42,c:38,f:14,foods:["Grilled chicken thigh 200g","½ cup brown rice","Roasted carrots & courgette","Kachumbari side"],note:""},
-    {t:"3:30 PM",l:"Snack 🍌",kcal:170,p:7,c:26,f:5,foods:["1 banana","1 boiled egg"],note:"Potassium prevents cramps"},
-    {t:"7:00 PM",l:"Dinner 🍲",kcal:400,p:16,c:66,f:6,foods:["Githeri (maize + beans) — 1 cup","Diced tomato, onion & coriander","1 tsp olive oil drizzle"],note:"Complete protein overnight"},
+    {t:"6:30 AM",l:"Pre-Workout âš¡",kcal:160,p:5,c:30,f:2,foods:["Â½ cup oats + 1 tsp honey","Black coffee"],note:"Most intense day â€” load up"},
+    {t:"9:30 AM",l:"Post-Workout Breakfast ðŸ³",kcal:480,p:34,c:6,f:30,foods:["3 scrambled eggs + 2 chicken sausages","Â½ avocado"],note:"Low-carb post-HIIT = burn stored fat"},
+    {t:"12:30 PM",l:"Lunch ðŸ›",kcal:510,p:42,c:38,f:14,foods:["Grilled chicken thigh 200g","Â½ cup brown rice","Roasted carrots & courgette","Kachumbari side"],note:""},
+    {t:"3:30 PM",l:"Snack ðŸŒ",kcal:170,p:7,c:26,f:5,foods:["1 banana","1 boiled egg"],note:"Potassium prevents cramps"},
+    {t:"7:00 PM",l:"Dinner ðŸ²",kcal:400,p:16,c:66,f:6,foods:["Githeri (maize + beans) â€” 1 cup","Diced tomato, onion & coriander","1 tsp olive oil drizzle"],note:"Complete protein overnight"},
   ]},
   {day:"SAT",label:"Training",type:"train",kcal:1680,p:104,c:150,f:56,items:[
-    {t:"7:00 AM",l:"Breakfast 🍳",kcal:350,p:20,c:22,f:16,foods:["2 eggs any style","Sautéed tomatoes, onion & spinach","1 slice wholemeal toast"],note:""},
-    {t:"10:30 AM",l:"Post-Cardio Snack 🥛",kcal:180,p:8,c:28,f:3,foods:["Plain yoghurt 1 cup","½ cup papaya or mango cubes"],note:""},
-    {t:"1:00 PM",l:"Lunch 🐟",kcal:480,p:40,c:38,f:10,foods:["Tilapia or omena 200g grilled","Steamed broccoli, carrots & courgette","1 medium sweet potato"],note:""},
-    {t:"4:00 PM",l:"Snack 🥜",kcal:220,p:8,c:22,f:13,foods:["Groundnuts 30g","1 apple or orange"],note:""},
-    {t:"7:30 PM",l:"Dinner 🍲",kcal:450,p:28,c:40,f:14,foods:["Chapati 1 small (wholemeal)","Beef liver (ini) 100g with onion & tomato","Steamed sukuma wiki"],note:"Liver = iron, B12, zinc 💪"},
+    {t:"7:00 AM",l:"Breakfast ðŸ³",kcal:350,p:20,c:22,f:16,foods:["2 eggs any style","SautÃ©ed tomatoes, onion & spinach","1 slice wholemeal toast"],note:""},
+    {t:"10:30 AM",l:"Post-Cardio Snack ðŸ¥›",kcal:180,p:8,c:28,f:3,foods:["Plain yoghurt 1 cup","Â½ cup papaya or mango cubes"],note:""},
+    {t:"1:00 PM",l:"Lunch ðŸŸ",kcal:480,p:40,c:38,f:10,foods:["Tilapia or omena 200g grilled","Steamed broccoli, carrots & courgette","1 medium sweet potato"],note:""},
+    {t:"4:00 PM",l:"Snack ðŸ¥œ",kcal:220,p:8,c:22,f:13,foods:["Groundnuts 30g","1 apple or orange"],note:""},
+    {t:"7:30 PM",l:"Dinner ðŸ²",kcal:450,p:28,c:40,f:14,foods:["Chapati 1 small (wholemeal)","Beef liver (ini) 100g with onion & tomato","Steamed sukuma wiki"],note:"Liver = iron, B12, zinc ðŸ’ª"},
   ]},
   {day:"SUN",label:"Rest",type:"rest",kcal:1340,p:60,c:168,f:34,items:[
-    {t:"8:30 AM",l:"Brunch 🌿",kcal:380,p:16,c:46,f:12,foods:["Smoothie: banana + spinach + pawpaw + water","2 boiled eggs","1 slice wholemeal toast"],note:""},
-    {t:"1:00 PM",l:"Lunch 🍛",kcal:500,p:25,c:50,f:16,foods:["Family lunch — whatever is cooked","Protein = palm · Carbs = fist · Unlimited veg","Skip seconds"],note:"Eat with your people 🤍"},
-    {t:"4:00 PM",l:"Snack 🍊",kcal:100,p:1,c:24,f:0,foods:["Fresh fruit","Black tea"],note:""},
-    {t:"7:30 PM",l:"Dinner 🍲",kcal:360,p:18,c:48,f:6,foods:["Lentil soup — 1.5 cups","1 slice wholemeal bread","Side salad with lemon"],note:"Light Sunday = better Monday"},
+    {t:"8:30 AM",l:"Brunch ðŸŒ¿",kcal:380,p:16,c:46,f:12,foods:["Smoothie: banana + spinach + pawpaw + water","2 boiled eggs","1 slice wholemeal toast"],note:""},
+    {t:"1:00 PM",l:"Lunch ðŸ›",kcal:500,p:25,c:50,f:16,foods:["Family lunch â€” whatever is cooked","Protein = palm Â· Carbs = fist Â· Unlimited veg","Skip seconds"],note:"Eat with your people ðŸ¤"},
+    {t:"4:00 PM",l:"Snack ðŸŠ",kcal:100,p:1,c:24,f:0,foods:["Fresh fruit","Black tea"],note:""},
+    {t:"7:30 PM",l:"Dinner ðŸ²",kcal:360,p:18,c:48,f:6,foods:["Lentil soup â€” 1.5 cups","1 slice wholemeal bread","Side salad with lemon"],note:"Light Sunday = better Monday"},
   ]},
 ];
 
 const TIPS=[
-  {emoji:"🔄",cat:"Training",title:"Why You've Plateaued — And How to Fix It",time:"3 min read",
-   body:"After 6–8 weeks of the same workouts, your body adapts and stops changing. The fix is progressive overload — adding weight, sets, or reps each week. Your body needs a reason to keep changing. Random workouts feel productive but produce no long-term signal for your muscles. This plan solves that by adding exactly one variable per week.",
-   tips:["Increase weight by 2.5–5kg every 1–2 weeks","Add 1 extra set per month on key lifts","Reduce rest time to increase intensity","Track your lifts — what gets measured gets improved"]},
-  {emoji:"⚖️",cat:"Weight Loss",title:"Why the Scale Is Lying to You",time:"4 min read",
-   body:"If you're training consistently and eating well but the scale isn't moving, you're probably in body recomposition — losing fat and building muscle simultaneously. Muscle is denser than fat, so your body is changing dramatically while the number stays the same. This is actually the best outcome from your training.",
-   tips:["Take waist, hip, and arm measurements every 2 weeks","Take progress photos monthly — frontal and side","Track how your clothes fit","Note energy levels, strength gains, and sleep quality"]},
-  {emoji:"🛒",cat:"Nutrition",title:"Nairobi Kitchen Swaps for Fat Loss",time:"3 min read",
-   body:"You don't need expensive supplements or imported food. The most powerful fat loss foods are already in Nairobi markets at low cost. The key is substitution — making smarter choices with the same budget.",
-   tips:["Swap ugali for sweet potato (same fullness, 40% fewer calories)","Omena instead of protein powder (10× cheaper, more nutritious)","Season avocados at Ksh 10–20 — use instead of butter/mayo","Skip soda and juice — 200–400 empty calories per day"]},
-  {emoji:"😴",cat:"Recovery",title:"Recovery IS Training — Don't Skip Rest Days",time:"3 min read",
-   body:"Fat loss and muscle building actually happen during recovery, not during the workout itself. The workout is the stimulus; rest is when your body responds. Skipping rest days doesn't accelerate results — it slows them down by preventing full adaptation.",
-   tips:["7–9 hours of sleep is non-negotiable for fat loss","Rest days with light yoga or walking accelerate recovery","Sleep deprivation increases cortisol, which stores fat","Foam roll for 10 min on rest days — reduces soreness by 30%"]},
-  {emoji:"🍽️",cat:"Social Eating",title:"How to Eat at Events Without Losing Progress",time:"3 min read",
-   body:"Birthdays, weddings, family lunches — life happens. One social event does not derail your progress. What derails progress is the spiral after — the 'I've already messed up' mindset that leads to 3 bad days. Have a strategy and get back on track the next morning.",
-   tips:["Eat a protein-rich snack before the event to reduce hunger","Prioritise protein and vegetables first, then other foods","One plate, no seconds — enjoy it without guilt","Don't drink calories — choose water, black tea, or soda water"]},
-  {emoji:"🌅",cat:"Lifestyle",title:"The Morning Workout Advantage",time:"2 min read",
-   body:"Morning workouts have one advantage nothing else can replicate: they're done before the day has a chance to interfere. Late nights, meetings, social events — none of these can cancel a workout you've already completed by 9am. Your routine works best when it protects your workout slot first.",
-   tips:["Lay out clothes the night before — reduces morning friction","Pre-workout snack ready on the counter","Alarm is non-negotiable — put it across the room","Even 25 minutes counts on a tough morning — just show up"]},
+  {emoji:"ðŸ”„",cat:"Training",title:"Why You've Plateaued â€” And How to Fix It",time:"3 min read",
+   body:"After 6â€“8 weeks of the same workouts, your body adapts and stops changing. The fix is progressive overload â€” adding weight, sets, or reps each week. Your body needs a reason to keep changing. Random workouts feel productive but produce no long-term signal for your muscles. This plan solves that by adding exactly one variable per week.",
+   tips:["Increase weight by 2.5â€“5kg every 1â€“2 weeks","Add 1 extra set per month on key lifts","Reduce rest time to increase intensity","Track your lifts â€” what gets measured gets improved"]},
+  {emoji:"âš–ï¸",cat:"Weight Loss",title:"Why the Scale Is Lying to You",time:"4 min read",
+   body:"If you're training consistently and eating well but the scale isn't moving, you're probably in body recomposition â€” losing fat and building muscle simultaneously. Muscle is denser than fat, so your body is changing dramatically while the number stays the same. This is actually the best outcome from your training.",
+   tips:["Take waist, hip, and arm measurements every 2 weeks","Take progress photos monthly â€” frontal and side","Track how your clothes fit","Note energy levels, strength gains, and sleep quality"]},
+  {emoji:"ðŸ›’",cat:"Nutrition",title:"Nairobi Kitchen Swaps for Fat Loss",time:"3 min read",
+   body:"You don't need expensive supplements or imported food. The most powerful fat loss foods are already in Nairobi markets at low cost. The key is substitution â€” making smarter choices with the same budget.",
+   tips:["Swap ugali for sweet potato (same fullness, 40% fewer calories)","Omena instead of protein powder (10Ã— cheaper, more nutritious)","Season avocados at Ksh 10â€“20 â€” use instead of butter/mayo","Skip soda and juice â€” 200â€“400 empty calories per day"]},
+  {emoji:"ðŸ˜´",cat:"Recovery",title:"Recovery IS Training â€” Don't Skip Rest Days",time:"3 min read",
+   body:"Fat loss and muscle building actually happen during recovery, not during the workout itself. The workout is the stimulus; rest is when your body responds. Skipping rest days doesn't accelerate results â€” it slows them down by preventing full adaptation.",
+   tips:["7â€“9 hours of sleep is non-negotiable for fat loss","Rest days with light yoga or walking accelerate recovery","Sleep deprivation increases cortisol, which stores fat","Foam roll for 10 min on rest days â€” reduces soreness by 30%"]},
+  {emoji:"ðŸ½ï¸",cat:"Social Eating",title:"How to Eat at Events Without Losing Progress",time:"3 min read",
+   body:"Birthdays, weddings, family lunches â€” life happens. One social event does not derail your progress. What derails progress is the spiral after â€” the 'I've already messed up' mindset that leads to 3 bad days. Have a strategy and get back on track the next morning.",
+   tips:["Eat a protein-rich snack before the event to reduce hunger","Prioritise protein and vegetables first, then other foods","One plate, no seconds â€” enjoy it without guilt","Don't drink calories â€” choose water, black tea, or soda water"]},
+  {emoji:"ðŸŒ…",cat:"Lifestyle",title:"The Morning Workout Advantage",time:"2 min read",
+   body:"Morning workouts have one advantage nothing else can replicate: they're done before the day has a chance to interfere. Late nights, meetings, social events â€” none of these can cancel a workout you've already completed by 9am. Your routine works best when it protects your workout slot first.",
+   tips:["Lay out clothes the night before â€” reduces morning friction","Pre-workout snack ready on the counter","Alarm is non-negotiable â€” put it across the room","Even 25 minutes counts on a tough morning â€” just show up"]},
 ];
 
 function PBar({label,val,max,color}){
@@ -305,6 +311,7 @@ function WorkoutTab(){
   const [equip,setEquip]=useState("full");
   const [diff,setDiff]=useState("intermediate");
   const [checked,setChecked]=useState({});
+  const [demo,setDemo]=useState(null);
   const wk=WEEKS[wi]; const day=wk.days[di];
   const k=`${wi}-${di}`;
   const D=DIFF.find(d=>d.id===diff);
@@ -352,7 +359,7 @@ function WorkoutTab(){
             </button>
           ))}
         </div>
-        {D.note&&<div style={{fontSize:11,color:B.primary,marginTop:6}}>💡 {D.note}{D.restMod?` · Rest ${D.restMod}`:""}</div>}
+        {D.note&&<div style={{fontSize:11,color:B.primary,marginTop:6}}>ðŸ’¡ {D.note}{D.restMod?` Â· Rest ${D.restMod}`:""}</div>}
       </div>
 
       {/* Equipment */}
@@ -382,7 +389,7 @@ function WorkoutTab(){
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
             <div>
               <div className="brand" style={{fontSize:22,fontWeight:900}}>{day.emoji} {day.label}</div>
-              <div style={{fontSize:11,color:B.muted,marginTop:2}}>{wk.label} · {day.day}</div>
+              <div style={{fontSize:11,color:B.muted,marginTop:2}}>{wk.label} Â· {day.day}</div>
             </div>
             <span className="badge" style={{background:TYPE[day.type]?.bg,color:TYPE[day.type]?.c,border:`1px solid ${TYPE[day.type]?.c}44`}}>{TYPE[day.type]?.l}</span>
           </div>
@@ -396,31 +403,39 @@ function WorkoutTab(){
 
         {day.warmup.length>0&&(
           <div className="wc" style={{margin:"12px 14px 0",padding:"10px 12px"}}>
-            <div style={{fontSize:10,textTransform:"uppercase",letterSpacing:"0.1em",color:B.green,fontWeight:700,marginBottom:6}}>🌿 Warm-Up (5–8 min)</div>
-            {day.warmup.map((w,i)=><div key={i} style={{fontSize:13,color:B.muted,paddingLeft:8,marginBottom:3}}>· {w}</div>)}
+            <div style={{fontSize:10,textTransform:"uppercase",letterSpacing:"0.1em",color:B.green,fontWeight:700,marginBottom:6}}>ðŸŒ¿ Warm-Up (5â€“8 min)</div>
+            {day.warmup.map((w,i)=><div key={i} style={{fontSize:13,color:B.muted,paddingLeft:8,marginBottom:3}}>Â· {w}</div>)}
           </div>
         )}
 
         <div style={{padding:"12px 14px"}}>
-          <div style={{fontSize:10,textTransform:"uppercase",letterSpacing:"0.1em",color:B.primary,fontWeight:700,marginBottom:10}}>💥 Main Workout</div>
+          <div style={{fontSize:10,textTransform:"uppercase",letterSpacing:"0.1em",color:B.primary,fontWeight:700,marginBottom:10}}>ðŸ’¥ Main Workout</div>
           {day.ex.map((ex,i)=>{
             const isDone=done(i);
             const name=sw(ex.n,equip);
             const sets=getSets(ex.s);
+            const cue=cueFor(ex);
+            const gif=demoGif(name);
             return(
               <div key={i} className={`exitem ${isDone?"done":""}`} onClick={()=>day.type!=="rest"&&toggle(i)}>
-                <div style={{display:"flex",alignItems:"flex-start",gap:10}}>
-                  <div className={`check ${isDone?"done":""}`}>{isDone&&<span style={{fontSize:12,color:"#fff"}}>✓</span>}</div>
-                  <div style={{flex:1}}>
-                    <div style={{display:"flex",justifyContent:"space-between",gap:8,flexWrap:"wrap"}}>
-                      <div style={{fontWeight:600,fontSize:13,color:isDone?B.muted:B.text,textDecoration:isDone?"line-through":"none",flex:1}}>{name}</div>
-                      <div style={{display:"flex",gap:4,flexShrink:0,flexWrap:"wrap"}}>
-                        {ex.s!=="—"&&<span style={{background:B.bg,color:isDone?B.green:B.primary,fontSize:10,padding:"2px 7px",borderRadius:4,fontWeight:700}}>{sets}</span>}
-                        {ex.r!=="—"&&<span style={{background:B.bg,color:B.muted,fontSize:10,padding:"2px 7px",borderRadius:4}}>{ex.r}</span>}
-                        {ex.t&&ex.t!=="—"&&ex.t!==""&&<span style={{background:B.bg,color:B.dim,fontSize:10,padding:"2px 7px",borderRadius:4}}>⏱{ex.t}</span>}
+                <div style={{display:"grid",gridTemplateColumns:"92px 1fr",gap:12,alignItems:"start"}}>
+                  <img className="demo-img" src={gif} alt={`${name} demo`} loading="lazy"/>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{display:"flex",alignItems:"flex-start",gap:9,marginBottom:8}}>
+                      <div className={`check ${isDone?"done":""}`}>{isDone&&<span style={{fontSize:12,color:"#fff"}}>&#10003;</span>}</div>
+                      <div style={{flex:1,minWidth:0}}>
+                        <div style={{fontWeight:800,fontSize:14,color:isDone?B.muted:B.text,textDecoration:isDone?"line-through":"none",lineHeight:1.25}}>{name}</div>
+                        <div style={{fontSize:11,color:B.muted,marginTop:4,lineHeight:1.35}}>{cue}</div>
                       </div>
                     </div>
-                    {ex.note&&!isDone&&<div style={{fontSize:11,color:B.dim,marginTop:4}}>💡 {ex.note}</div>}
+                    <div style={{display:"flex",gap:6,flexWrap:"wrap",alignItems:"center",justifyContent:"space-between"}}>
+                      <div style={{display:"flex",gap:5,flexWrap:"wrap"}}>
+                        {ex.s!=="—"&&<span className="metric-pill">{sets} sets</span>}
+                        {ex.r!=="—"&&<span className="metric-pill">{ex.r} reps</span>}
+                        {ex.t&&ex.t!=="—"&&ex.t!==""&&<span className="metric-pill">{ex.t} rest</span>}
+                      </div>
+                      <button className="demo-btn" onClick={(ev)=>{ev.stopPropagation();setDemo({name,sets,reps:ex.r,rest:ex.t,cue,gif});}}>Watch Demo</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -430,18 +445,39 @@ function WorkoutTab(){
 
         {day.cd.length>0&&(
           <div className="wc" style={{margin:"0 14px 14px",padding:"10px 12px"}}>
-            <div style={{fontSize:10,textTransform:"uppercase",letterSpacing:"0.1em",color:B.purple,fontWeight:700,marginBottom:6}}>🌙 Cool-Down (8–10 min)</div>
-            {day.cd.map((c,i)=><div key={i} style={{fontSize:13,color:B.muted,paddingLeft:8,marginBottom:3}}>· {c}</div>)}
+            <div style={{fontSize:10,textTransform:"uppercase",letterSpacing:"0.1em",color:B.purple,fontWeight:700,marginBottom:6}}>ðŸŒ™ Cool-Down (8â€“10 min)</div>
+            {day.cd.map((c,i)=><div key={i} style={{fontSize:13,color:B.muted,paddingLeft:8,marginBottom:3}}>Â· {c}</div>)}
           </div>
         )}
 
         {pct===100&&day.type!=="rest"&&day.type!=="recovery"&&(
           <div style={{margin:"0 14px 14px",background:"#0A1F0A",border:`1px solid ${B.green}44`,borderRadius:12,padding:"12px",textAlign:"center"}}>
-            <div style={{fontSize:24,marginBottom:4}}>🎉</div>
+            <div style={{fontSize:24,marginBottom:4}}>ðŸŽ‰</div>
             <div className="brand" style={{fontSize:15,fontWeight:800,color:B.green}}>Session Complete!</div>
           </div>
         )}
       </div>
+      {demo&&(
+        <div
+          onClick={()=>setDemo(null)}
+          style={{position:"fixed",inset:0,background:"#15172BCC",zIndex:200,display:"flex",alignItems:"flex-end",justifyContent:"center",padding:"18px"}}
+        >
+          <div
+            onClick={(ev)=>ev.stopPropagation()}
+            style={{width:"100%",maxWidth:430,background:B.card,borderRadius:24,padding:18,boxShadow:"0 24px 70px #00000033"}}
+          >
+            <img className="demo-img" src={demo.gif} alt={`${demo.name} demo`} style={{marginBottom:14}}/>
+            <div className="brand" style={{fontSize:20,fontWeight:900,color:B.navy,marginBottom:6}}>{demo.name}</div>
+            <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:12}}>
+              {demo.sets!=="—"&&<span className="metric-pill">{demo.sets} sets</span>}
+              {demo.reps!=="—"&&<span className="metric-pill">{demo.reps} reps</span>}
+              {demo.rest&&demo.rest!=="—"&&<span className="metric-pill">{demo.rest} rest</span>}
+            </div>
+            <div style={{fontSize:13,color:B.muted,lineHeight:1.55,marginBottom:16}}>{demo.cue}</div>
+            <button className="btn-p" onClick={()=>setDemo(null)} style={{width:"100%",padding:"14px 0",fontSize:14,borderRadius:16}}>Done</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -452,8 +488,8 @@ function MealsTab(){
   return(
     <div style={{paddingBottom:16}}>
       <div style={{background:B.card,borderRadius:16,border:`1px solid ${B.border}`,padding:"16px",marginBottom:16}}>
-        <div className="brand" style={{fontSize:18,fontWeight:900,marginBottom:3}}>📊 Daily Targets</div>
-        <div style={{fontSize:12,color:B.muted,marginBottom:14}}>Training ~1,700 kcal · Rest ~1,350 kcal · Deficit ~400/day</div>
+        <div className="brand" style={{fontSize:18,fontWeight:900,marginBottom:3}}>ðŸ“Š Daily Targets</div>
+        <div style={{fontSize:12,color:B.muted,marginBottom:14}}>Training ~1,700 kcal Â· Rest ~1,350 kcal Â· Deficit ~400/day</div>
         <PBar label="Protein" val={115} max={130} color={B.primary}/>
         <PBar label="Carbs" val={160} max={200} color={B.blue}/>
         <PBar label="Fats" val={55} max={80} color={B.green}/>
@@ -470,8 +506,8 @@ function MealsTab(){
       <div style={{background:B.card,borderRadius:20,border:`1px solid ${B.border}`,overflow:"hidden"}}>
         <div style={{padding:"14px 16px",borderBottom:`1px solid ${B.border}`,display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:8}}>
           <div>
-            <div className="brand" style={{fontSize:20,fontWeight:900}}>🍽️ {d.day} — {d.label}</div>
-            <div style={{fontSize:11,color:B.muted,marginTop:2}}>{d.kcal} kcal · {d.p}g P · {d.c}g C · {d.f}g F</div>
+            <div className="brand" style={{fontSize:20,fontWeight:900}}>ðŸ½ï¸ {d.day} â€” {d.label}</div>
+            <div style={{fontSize:11,color:B.muted,marginTop:2}}>{d.kcal} kcal Â· {d.p}g P Â· {d.c}g C Â· {d.f}g F</div>
           </div>
           <span className="badge" style={{background:d.type==="train"?B.light:"#F5F3FF",color:d.type==="train"?B.primary:B.purple,border:`1px solid ${d.type==="train"?B.primary:B.purple}33`}}>
             {d.type==="train"?"Training":"Rest"}
@@ -484,21 +520,21 @@ function MealsTab(){
                 <div style={{fontWeight:700,fontSize:13}}>{m.l} <span style={{fontWeight:400,fontSize:11,color:B.muted}}>{m.t}</span></div>
                 <span style={{fontSize:11,color:B.primary,fontWeight:700,background:B.surface,padding:"2px 8px",borderRadius:6}}>{m.kcal} kcal</span>
               </div>
-              {m.foods.map((f,j)=><div key={j} style={{fontSize:13,color:B.muted,paddingLeft:4,marginBottom:2}}>· {f}</div>)}
+              {m.foods.map((f,j)=><div key={j} style={{fontSize:13,color:B.muted,paddingLeft:4,marginBottom:2}}>Â· {f}</div>)}
               <div style={{display:"flex",gap:6,marginTop:8,flexWrap:"wrap"}}>
                 <span style={{fontSize:10,color:B.primary,background:B.bg,padding:"2px 7px",borderRadius:4}}>P {m.p}g</span>
                 <span style={{fontSize:10,color:B.blue,background:B.bg,padding:"2px 7px",borderRadius:4}}>C {m.c}g</span>
                 <span style={{fontSize:10,color:B.green,background:B.bg,padding:"2px 7px",borderRadius:4}}>F {m.f}g</span>
               </div>
-              {m.note&&<div style={{fontSize:11,color:B.dim,marginTop:6}}>💡 {m.note}</div>}
+              {m.note&&<div style={{fontSize:11,color:B.dim,marginTop:6}}>ðŸ’¡ {m.note}</div>}
             </div>
           ))}
         </div>
       </div>
       <div style={{marginTop:16,background:B.card,borderRadius:16,border:`1px solid ${B.border}`,padding:"16px"}}>
-        <div className="brand" style={{fontSize:15,fontWeight:800,color:B.primary,marginBottom:12}}>🛒 NAIROBI KITCHEN RULES</div>
+        <div className="brand" style={{fontSize:15,fontWeight:800,color:B.primary,marginBottom:12}}>ðŸ›’ NAIROBI KITCHEN RULES</div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
-          {[{e:"🥚",t:"Eggs = BFF",b:"Cheapest fastest protein. 2 trays home always."},{e:"🐟",t:"Omena > supplements",b:"10× cheaper. More nutritious."},{e:"🥑",t:"Avocado season",b:"Ksh 10–20. Use instead of butter."},{e:"🍠",t:"Ugali → sweet potato",b:"Same fullness, more fibre."},{e:"💧",t:"Water before meals",b:"500ml × 15 min before. Cuts hunger."},{e:"🚫",t:"Cut these 3",b:"Soda · white bread daily · frying everything."}].map(x=>(
+          {[{e:"ðŸ¥š",t:"Eggs = BFF",b:"Cheapest fastest protein. 2 trays home always."},{e:"ðŸŸ",t:"Omena > supplements",b:"10Ã— cheaper. More nutritious."},{e:"ðŸ¥‘",t:"Avocado season",b:"Ksh 10â€“20. Use instead of butter."},{e:"ðŸ ",t:"Ugali â†’ sweet potato",b:"Same fullness, more fibre."},{e:"ðŸ’§",t:"Water before meals",b:"500ml Ã— 15 min before. Cuts hunger."},{e:"ðŸš«",t:"Cut these 3",b:"Soda Â· white bread daily Â· frying everything."}].map(x=>(
             <div key={x.t} style={{background:B.surface,borderRadius:10,padding:"10px 11px"}}>
               <div style={{fontSize:16,marginBottom:3}}>{x.e}</div>
               <div style={{fontSize:11,fontWeight:700,marginBottom:2}}>{x.t}</div>
@@ -517,12 +553,12 @@ function TipsTab(){
   if(tip) return(
     <div style={{paddingBottom:16}}>
       <button onClick={()=>setOpen(null)} style={{background:"none",border:"none",color:B.primary,fontWeight:700,fontSize:13,cursor:"pointer",marginBottom:16,display:"flex",alignItems:"center",gap:6}}>
-        ← Back to Tips
+        â† Back to Tips
       </button>
       <div style={{background:B.card,borderRadius:20,border:`1px solid ${B.border}`,overflow:"hidden"}}>
         <div style={{padding:"20px 18px",background:B.surface,borderBottom:`1px solid ${B.border}`}}>
           <div style={{fontSize:36,marginBottom:10}}>{tip.emoji}</div>
-          <div style={{fontSize:11,color:B.primary,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:6}}>{tip.cat} · {tip.time}</div>
+          <div style={{fontSize:11,color:B.primary,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:6}}>{tip.cat} Â· {tip.time}</div>
           <div className="brand" style={{fontSize:22,fontWeight:900,lineHeight:1.2}}>{tip.title}</div>
         </div>
         <div style={{padding:"18px"}}>
@@ -530,7 +566,7 @@ function TipsTab(){
           <div style={{fontSize:11,color:B.primary,fontWeight:700,textTransform:"uppercase",letterSpacing:"0.08em",marginBottom:10}}>Key Takeaways</div>
           {tip.tips.map((t,i)=>(
             <div key={i} style={{display:"flex",gap:10,marginBottom:12,padding:"10px 12px",background:B.surface,borderRadius:10}}>
-              <span style={{color:B.primary,fontWeight:700,flexShrink:0}}>→</span>
+              <span style={{color:B.primary,fontWeight:700,flexShrink:0}}>â†’</span>
               <span style={{fontSize:13,color:B.muted,lineHeight:1.5}}>{t}</span>
             </div>
           ))}
@@ -540,7 +576,7 @@ function TipsTab(){
   );
   return(
     <div style={{paddingBottom:16}}>
-      <div className="brand" style={{fontSize:22,fontWeight:900,marginBottom:4}}>Fitness Tips 📚</div>
+      <div className="brand" style={{fontSize:22,fontWeight:900,marginBottom:4}}>Fitness Tips ðŸ“š</div>
       <div style={{fontSize:13,color:B.muted,marginBottom:20}}>Evidence-based guidance for your journey</div>
       {TIPS.map((t,i)=>(
         <div key={i} className="bcard" onClick={()=>setOpen(i)}>
@@ -576,7 +612,7 @@ function ProfileTab({cw,tw,sw:startW,onUpdateC,onUpdateT}){
   return(
     <div style={{paddingBottom:16}}>
       <div style={{background:B.card,borderRadius:20,border:`1px solid ${B.border}`,padding:"20px 18px",marginBottom:16}}>
-        <div className="brand" style={{fontSize:18,fontWeight:900,marginBottom:16}}>⚖️ My Weight Goals</div>
+        <div className="brand" style={{fontSize:18,fontWeight:900,marginBottom:16}}>âš–ï¸ My Weight Goals</div>
         <div style={{display:"flex",gap:12,marginBottom:18}}>
           <div style={{flex:1}}>
             <div style={{fontSize:11,color:B.muted,textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:8}}>Current Weight</div>
@@ -594,7 +630,7 @@ function ProfileTab({cw,tw,sw:startW,onUpdateC,onUpdateT}){
           </div>
         </div>
         <button className="btn-p" onClick={save} style={{width:"100%",padding:"13px",fontSize:14,marginBottom:20,background:saved?`linear-gradient(135deg,${B.green},#22c55e)`:undefined}}>
-          {saved?"✓ Saved!":"Update My Goals"}
+          {saved?"âœ“ Saved!":"Update My Goals"}
         </button>
         <div style={{display:"flex",justifyContent:"center",marginBottom:16}}><WeightRing current={cw} target={tw} start={startW}/></div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}}>
@@ -607,13 +643,13 @@ function ProfileTab({cw,tw,sw:startW,onUpdateC,onUpdateT}){
         </div>
         {parseFloat(toLose)>0&&(
           <div style={{marginTop:12,padding:"10px 14px",background:`${B.primary}15`,borderRadius:10,border:`1px solid ${B.primary}33`,textAlign:"center"}}>
-            <span className="brand" style={{fontSize:14,fontWeight:800,color:B.primary}}>{toLose} kg to go 💪</span>
+            <span className="brand" style={{fontSize:14,fontWeight:800,color:B.primary}}>{toLose} kg to go ðŸ’ª</span>
           </div>
         )}
       </div>
       <div style={{background:B.card,borderRadius:16,border:`1px solid ${B.border}`,padding:"16px",marginBottom:16}}>
-        <div className="brand" style={{fontSize:15,fontWeight:800,marginBottom:12,color:B.primary}}>📅 WEEKLY SCHEDULE</div>
-        {[{d:"Monday",s:"💪 Upper Body Strength",t:"strength"},{d:"Tuesday",s:"🧘 Active Recovery",t:"recovery"},{d:"Wednesday",s:"🦵 Lower Body Strength",t:"strength"},{d:"Thursday",s:"🧘 Active Recovery",t:"recovery"},{d:"Friday",s:"⚡ Full Body HIIT",t:"hiit"},{d:"Saturday",s:"🏃 Cardio + Core",t:"cardio"},{d:"Sunday",s:"😴 Full Rest",t:"rest"}].map(x=>(
+        <div className="brand" style={{fontSize:15,fontWeight:800,marginBottom:12,color:B.primary}}>ðŸ“… WEEKLY SCHEDULE</div>
+        {[{d:"Monday",s:"ðŸ’ª Upper Body Strength",t:"strength"},{d:"Tuesday",s:"ðŸ§˜ Active Recovery",t:"recovery"},{d:"Wednesday",s:"ðŸ¦µ Lower Body Strength",t:"strength"},{d:"Thursday",s:"ðŸ§˜ Active Recovery",t:"recovery"},{d:"Friday",s:"âš¡ Full Body HIIT",t:"hiit"},{d:"Saturday",s:"ðŸƒ Cardio + Core",t:"cardio"},{d:"Sunday",s:"ðŸ˜´ Full Rest",t:"rest"}].map(x=>(
           <div key={x.d} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",borderBottom:`1px solid ${B.border}`}}>
             <div style={{width:8,height:8,borderRadius:"50%",background:TYPE[x.t]?.c,flexShrink:0}}/>
             <div style={{fontSize:12,color:B.muted,minWidth:84}}>{x.d}</div>
@@ -622,13 +658,13 @@ function ProfileTab({cw,tw,sw:startW,onUpdateC,onUpdateT}){
         ))}
       </div>
       <div style={{background:B.card,borderRadius:16,border:`1px solid ${B.border}`,padding:"16px"}}>
-        <div className="brand" style={{fontSize:15,fontWeight:800,marginBottom:12,color:B.primary}}>🏋️ DIFFICULTY LEVELS</div>
+        <div className="brand" style={{fontSize:15,fontWeight:800,marginBottom:12,color:B.primary}}>ðŸ‹ï¸ DIFFICULTY LEVELS</div>
         {DIFF.map(d=>(
           <div key={d.id} style={{display:"flex",alignItems:"center",gap:12,padding:"9px 0",borderBottom:`1px solid ${B.border}`}}>
             <span style={{fontSize:16}}>{d.label.split(" ")[0]}</span>
             <div>
               <div style={{fontSize:13,fontWeight:600}}>{d.label.split(" ").slice(1).join(" ")}</div>
-              <div style={{fontSize:11,color:B.muted}}>{d.sets===0?"3–4 sets as per plan":d.sets>0?"+1 set · shorter rest":"-1 set · longer rest"}</div>
+              <div style={{fontSize:11,color:B.muted}}>{d.sets===0?"3â€“4 sets as per plan":d.sets>0?"+1 set Â· shorter rest":"-1 set Â· longer rest"}</div>
             </div>
           </div>
         ))}
@@ -669,7 +705,7 @@ function Splash({onStart,onSetWeights}){
               <img src={LOGO_B64} alt="Fitness by Hazel" style={{width:74,height:74,borderRadius:20,objectFit:"cover",border:"4px solid #FFFFFF",boxShadow:"0 14px 34px #15172B14"}}/>
             </div>
             <div className="brand" style={{fontSize:28,fontWeight:900,marginBottom:8,color:B.navy}}>Set Your Goals</div>
-            <p style={{color:B.muted,fontSize:13,marginBottom:24,lineHeight:1.6}}>Enter your current and target weight — update anytime in My Plan.</p>
+            <p style={{color:B.muted,fontSize:13,marginBottom:24,lineHeight:1.6}}>Enter your current and target weight â€” update anytime in My Plan.</p>
             <div style={{display:"flex",gap:12,marginBottom:18}}>
               <div style={{flex:1}}>
                 <div style={{fontSize:11,color:B.muted,textTransform:"uppercase",letterSpacing:"0.06em",marginBottom:8,textAlign:"left"}}>Current weight</div>
@@ -682,7 +718,7 @@ function Splash({onStart,onSetWeights}){
             </div>
             {cw&&tw&&parseFloat(cw)>parseFloat(tw)&&(
               <div style={{padding:"11px 14px",background:B.light,borderRadius:14,border:`1px solid ${B.primary}33`,marginBottom:18}}>
-                <span className="brand" style={{fontSize:14,fontWeight:800,color:B.primary}}>Goal: lose {(parseFloat(cw)-parseFloat(tw)).toFixed(1)} kg 💪</span>
+                <span className="brand" style={{fontSize:14,fontWeight:800,color:B.primary}}>Goal: lose {(parseFloat(cw)-parseFloat(tw)).toFixed(1)} kg ðŸ’ª</span>
               </div>
             )}
             <button className="btn-p" onClick={go} style={{fontSize:16,padding:"17px 0",width:"100%",borderRadius:18,marginBottom:14}}>Let's Go</button>
@@ -702,7 +738,7 @@ export default function App(){
   const [tw,setTw]=useState(65);
   const setWeights=(c,t)=>{setStartW(c);setCw(c);setTw(t);};
   if(splash) return <div className="fbh"><style>{css}</style><Splash onStart={()=>setSplash(false)} onSetWeights={setWeights}/></div>;
-  const TABS=[{id:"workout",icon:"🏋️",label:"Workout"},{id:"meals",icon:"🍽️",label:"Meals"},{id:"tips",icon:"📚",label:"Tips"},{id:"profile",icon:"👤",label:"My Plan"}];
+  const TABS=[{id:"workout",icon:"ðŸ‹ï¸",label:"Workout"},{id:"meals",icon:"ðŸ½ï¸",label:"Meals"},{id:"tips",icon:"ðŸ“š",label:"Tips"},{id:"profile",icon:"ðŸ‘¤",label:"My Plan"}];
   return(
     <div className="fbh">
       <style>{css}</style>
@@ -712,7 +748,7 @@ export default function App(){
             <img src={LOGO_B64} alt="FBH" style={{width:36,height:36,borderRadius:10,objectFit:"cover"}}/>
             <div>
               <div className="brand" style={{fontSize:18,fontWeight:900,lineHeight:1,color:B.navy}}>Fitness <span style={{color:B.primary}}>by Hazel</span></div>
-              <div style={{fontSize:10,color:B.muted}}>4-Week Plan · {cw}kg → {tw}kg</div>
+              <div style={{fontSize:10,color:B.muted}}>4-Week Plan Â· {cw}kg â†’ {tw}kg</div>
             </div>
           </div>
           <div style={{textAlign:"right"}}>
