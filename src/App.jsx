@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+﻿import { useEffect, useState } from "react";
 
 const LOGO_B64 = "data:image/jpeg;base64,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";
 
@@ -30,6 +30,9 @@ const css = `
   .exitem{border-radius:16px;padding:13px 14px;margin-bottom:10px;border:1px solid #E2E8F0;background:#FFFFFF;transition:all 0.18s;cursor:pointer;box-shadow:0 8px 22px #15172B08;}
   .exitem.done{background:#ECFDF3;border-color:#16A34A33;}
   .demo-img{width:100%;aspect-ratio:16/9;border-radius:14px;object-fit:cover;border:1px solid #E2E8F0;background:#E9FBFB;display:block;}
+  .demo-media{position:relative;}
+  .demo-loading{position:absolute;inset:0;border-radius:14px;background:linear-gradient(110deg,#E9FBFB 8%,#F7F8FA 18%,#E9FBFB 33%);background-size:200% 100%;animation:demoShimmer 1.2s linear infinite;display:flex;align-items:center;justify-content:center;color:#00A6A6;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;}
+  @keyframes demoShimmer{to{background-position-x:-200%;}}
   .demo-btn{border:1px solid #00A6A633;background:#E9FBFB;color:#00A6A6;border-radius:999px;padding:8px 12px;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;transition:all 0.18s;}
   .demo-btn:hover{background:#00A6A6;color:#FFFFFF;}
   .metric-pill{background:#F7F8FA;border:1px solid #E2E8F0;border-radius:999px;padding:6px 9px;font-size:11px;font-weight:800;color:#15172B;}
@@ -86,7 +89,7 @@ const SWAP={
   "SS1: Barbell Deadlift + Burpee":{full:"SS1: Barbell Deadlift + Burpee",dbs:"SS1: DB Deadlift + Burpee",bands:"SS1: Band Pull-through + Burpee",bw:"SS1: Good Morning + Burpee"},
 };
 const sw=(n,e)=>SWAP[n]?SWAP[n][e]||n:n;
-const demoGif=(name)=>`https://placehold.co/640x360/E9FBFB/15172B.gif?text=${encodeURIComponent(name)}`;
+const fallbackDemo=(name)=>`https://placehold.co/480x270/E9FBFB/15172B.webp?text=${encodeURIComponent(name)}`;
 const cueFor=(ex)=>ex.note||"Move with control and keep steady breathing.";
 
 const WEEKS=[
@@ -312,6 +315,8 @@ function WorkoutTab(){
   const [diff,setDiff]=useState("intermediate");
   const [checked,setChecked]=useState({});
   const [demo,setDemo]=useState(null);
+  const [demoMap,setDemoMap]=useState({});
+  const [demosLoading,setDemosLoading]=useState(false);
   const wk=WEEKS[wi]; const day=wk.days[di];
   const k=`${wi}-${di}`;
   const D=DIFF.find(d=>d.id===diff);
@@ -325,6 +330,18 @@ function WorkoutTab(){
     const adj=Math.max(1,s+D.sets);
     return String(adj);
   };
+
+  useEffect(()=>{
+    let active=true;
+    const names=[...new Set(day.ex.map(ex=>sw(ex.n,equip)))];
+    setDemosLoading(true);
+    fetch(`/api/workoutx?names=${encodeURIComponent(names.join("|"))}`)
+      .then(res=>res.ok?res.json():Promise.reject(new Error("WorkoutX unavailable")))
+      .then(data=>{if(active)setDemoMap(data.exercises||{});})
+      .catch(()=>{if(active)setDemoMap({});})
+      .finally(()=>{if(active)setDemosLoading(false);});
+    return()=>{active=false;};
+  },[wi,di,equip]);
 
   return(
     <div style={{paddingBottom:16}}>
@@ -415,11 +432,15 @@ function WorkoutTab(){
             const name=sw(ex.n,equip);
             const sets=getSets(ex.s);
             const cue=cueFor(ex);
-            const gif=demoGif(name);
+            const match=demoMap[name];
+            const gif=match?.gifUrl||fallbackDemo(name);
             return(
               <div key={i} className={`exitem ${isDone?"done":""}`} onClick={()=>day.type!=="rest"&&toggle(i)}>
                 <div style={{display:"grid",gridTemplateColumns:"92px 1fr",gap:12,alignItems:"start"}}>
-                  <img className="demo-img" src={gif} alt={`${name} demo`} loading="lazy"/>
+                  <div className="demo-media">
+                    <img className="demo-img" src={gif} alt={`${name} demo`} loading="lazy" decoding="async"/>
+                    {demosLoading&&<div className="demo-loading">Loading</div>}
+                  </div>
                   <div style={{flex:1,minWidth:0}}>
                     <div style={{display:"flex",alignItems:"flex-start",gap:9,marginBottom:8}}>
                       <div className={`check ${isDone?"done":""}`}>{isDone&&<span style={{fontSize:12,color:"#fff"}}>&#10003;</span>}</div>
@@ -434,7 +455,7 @@ function WorkoutTab(){
                         {ex.r!=="—"&&<span className="metric-pill">{ex.r} reps</span>}
                         {ex.t&&ex.t!=="—"&&ex.t!==""&&<span className="metric-pill">{ex.t} rest</span>}
                       </div>
-                      <button className="demo-btn" onClick={(ev)=>{ev.stopPropagation();setDemo({name,sets,reps:ex.r,rest:ex.t,cue,gif});}}>Watch Demo</button>
+                      <button className="demo-btn" onClick={(ev)=>{ev.stopPropagation();setDemo({name,sets,reps:ex.r,rest:ex.t,cue,gif,matchedName:match?.name});}}>Watch Demo</button>
                     </div>
                   </div>
                 </div>
@@ -468,6 +489,9 @@ function WorkoutTab(){
           >
             <img className="demo-img" src={demo.gif} alt={`${demo.name} demo`} style={{marginBottom:14}}/>
             <div className="brand" style={{fontSize:20,fontWeight:900,color:B.navy,marginBottom:6}}>{demo.name}</div>
+            {demo.matchedName&&demo.matchedName!==demo.name&&(
+              <div style={{fontSize:11,color:B.primary,fontWeight:800,marginBottom:10}}>Matched demo: {demo.matchedName}</div>
+            )}
             <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:12}}>
               {demo.sets!=="—"&&<span className="metric-pill">{demo.sets} sets</span>}
               {demo.reps!=="—"&&<span className="metric-pill">{demo.reps} reps</span>}
