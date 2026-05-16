@@ -534,20 +534,20 @@ function WorkoutTab(){
                 No WorkoutX GIF match found yet. Showing the fallback placeholder for this exercise.
               </div>
             )}
-            {demo.debug?.error&&(
+            {!demo.hasGif&&demo.debug?.error&&(
               <div style={{background:"#FEF2F2",border:"1px solid #FCA5A5",color:"#991B1B",borderRadius:14,padding:"10px 12px",fontSize:12,fontWeight:700,lineHeight:1.45,marginBottom:12}}>
                 WorkoutX error: {demo.debug.error}
               </div>
             )}
-            {demo.manualDebug?.error&&(
+            {!demo.hasGif&&demo.manualDebug?.error&&(
               <div style={{background:"#FEF2F2",border:"1px solid #FCA5A5",color:"#991B1B",borderRadius:14,padding:"10px 12px",fontSize:12,fontWeight:700,lineHeight:1.45,marginBottom:12}}>
                 WorkoutX debug error: {demo.manualDebug.error}
               </div>
             )}
-            {demo.matchedName&&demo.matchedName!==demo.name&&(
+            {demo.matchedName&&(
               <div style={{fontSize:11,color:B.primary,fontWeight:800,marginBottom:10}}>Matched demo: {demo.matchedName}</div>
             )}
-            {import.meta.env.DEV&&demo.debug&&(
+            {import.meta.env.DEV&&!demo.hasGif&&demo.debug&&(
               <div style={{background:B.surface,border:`1px solid ${B.border}`,borderRadius:16,padding:12,marginBottom:14}}>
                 <div className="brand" style={{fontSize:13,fontWeight:900,color:B.navy,marginBottom:8}}>WorkoutX Debug</div>
                 <div style={{fontSize:11,color:B.muted,lineHeight:1.6,marginBottom:8}}>
@@ -560,7 +560,7 @@ function WorkoutTab(){
                 </pre>
               </div>
             )}
-            {import.meta.env.DEV&&(
+            {import.meta.env.DEV&&!demo.hasGif&&(
               <div style={{background:B.surface,border:`1px solid ${B.border}`,borderRadius:16,padding:12,marginBottom:14}}>
                 <div className="brand" style={{fontSize:13,fontWeight:900,color:B.navy,marginBottom:8}}>Manual Endpoint Test</div>
                 {demo.debugLoading&&<div style={{fontSize:12,color:B.muted}}>Loading raw WorkoutX responses...</div>}

@@ -8,7 +8,8 @@ const MANUAL_QUERY_MAP = [
   [/bench press/i, "bench press"],
   [/lateral raises?/i, "lateral raise"],
   [/walking lunges?|bulgarian split squat|plyometric lunges?|jump lunges?/i, "lunge"],
-  [/bent-over row|barbell row|dumbbell row|db row/i, "row"],
+  [/bent-?over row/i, "bent over row"],
+  [/barbell row|dumbbell row|db row/i, "row"],
   [/overhead press|arnold press/i, "shoulder press"],
   [/romanian deadlift|conventional deadlift|deadlift/i, "deadlift"],
   [/back squat|goblet squat|sumo squat|jump squat/i, "squat"],
@@ -78,6 +79,13 @@ function firstMediaField(value, path = "") {
   return null;
 }
 
+function defaultWorkoutXMedia(rawJson) {
+  const first = Array.isArray(rawJson?.data) ? rawJson.data[0] : null;
+  if (first?.gifUrl) return { field: "data[0].gifUrl", url: first.gifUrl, item: first };
+  const media = firstMediaField(first || rawJson);
+  return media ? { ...media, item: first || null } : null;
+}
+
 function scoreMatch(query, exercise) {
   const q = cleanName(query).toLowerCase();
   const n = String(exercise?.name || "").toLowerCase();
@@ -130,6 +138,7 @@ async function fetchCandidate(originalName, candidate, key) {
       return { item: null, debug };
     }
 
+    const defaultMedia = defaultWorkoutXMedia(debug.rawWorkoutXResponse);
     const list = unwrapWorkoutXResponse(debug.rawWorkoutXResponse);
     const ranked = list
       .map(item => {
@@ -139,9 +148,9 @@ async function fetchCandidate(originalName, candidate, key) {
       .filter(entry => entry.media?.url)
       .sort((a, b) => b.score - a.score);
 
-    const best = ranked[0] || null;
+    const best = ranked[0] || (defaultMedia ? { item: defaultMedia.item || list[0], media: defaultMedia, score: 100 } : null);
     if (!best) {
-      const fallbackMedia = firstMediaField(debug.rawWorkoutXResponse);
+      const fallbackMedia = defaultMedia || firstMediaField(debug.rawWorkoutXResponse);
       debug.detectedGifUrl = fallbackMedia?.url || null;
       debug.detectedMediaField = fallbackMedia?.field || null;
       debug.error = "WorkoutX response did not include a detectable image/video/media URL.";
@@ -184,7 +193,7 @@ async function fetchRawEndpoint(endpointUsed, key) {
 
     try {
       debug.rawJson = debug.rawText ? JSON.parse(debug.rawText) : null;
-      const media = firstMediaField(debug.rawJson);
+      const media = defaultWorkoutXMedia(debug.rawJson) || firstMediaField(debug.rawJson);
       debug.detectedMediaUrl = media?.url || null;
       debug.detectedMediaField = media?.field || null;
     } catch (error) {
@@ -227,8 +236,7 @@ export default async function handler(req, res) {
   const singleName = String(req.query.name || "").trim();
   if (singleName) {
     const endpoints = [
-      `${API_BASE}/exercises?name=${encodeURIComponent(singleName)}`,
-      `${API_BASE}/exercises/name/${encodeURIComponent(singleName)}`,
+      `${API_BASE}/exercises/name/${encodeURIComponent(cleanName(singleName))}`,
     ];
     const tests = await Promise.all(endpoints.map(endpoint => fetchRawEndpoint(endpoint, key)));
 
