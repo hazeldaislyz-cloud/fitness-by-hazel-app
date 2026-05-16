@@ -337,8 +337,14 @@ function WorkoutTab(){
     setDemosLoading(true);
     fetch(`/api/workoutx?names=${encodeURIComponent(names.join("|"))}`)
       .then(res=>res.ok?res.json():Promise.reject(new Error("WorkoutX unavailable")))
-      .then(data=>{if(active)setDemoMap(data.exercises||{});})
-      .catch(()=>{if(active)setDemoMap({});})
+      .then(data=>{
+        console.log("[WorkoutX] /api/workoutx response", data);
+        if(active)setDemoMap(data.exercises||{});
+      })
+      .catch(error=>{
+        console.error("[WorkoutX] /api/workoutx failed", error);
+        if(active)setDemoMap({});
+      })
       .finally(()=>{if(active)setDemosLoading(false);});
     return()=>{active=false;};
   },[wi,di,equip]);
@@ -455,7 +461,7 @@ function WorkoutTab(){
                         {ex.r!=="—"&&<span className="metric-pill">{ex.r} reps</span>}
                         {ex.t&&ex.t!=="—"&&ex.t!==""&&<span className="metric-pill">{ex.t} rest</span>}
                       </div>
-                      <button className="demo-btn" onClick={(ev)=>{ev.stopPropagation();setDemo({name,sets,reps:ex.r,rest:ex.t,cue,gif,matchedName:match?.name});}}>Watch Demo</button>
+                      <button className="demo-btn" onClick={(ev)=>{ev.stopPropagation();setDemo({name,sets,reps:ex.r,rest:ex.t,cue,gif,matchedName:match?.name,hasGif:Boolean(match?.gifUrl)});}}>Watch Demo</button>
                     </div>
                   </div>
                 </div>
@@ -489,6 +495,11 @@ function WorkoutTab(){
           >
             <img className="demo-img" src={demo.gif} alt={`${demo.name} demo`} style={{marginBottom:14}}/>
             <div className="brand" style={{fontSize:20,fontWeight:900,color:B.navy,marginBottom:6}}>{demo.name}</div>
+            {!demo.hasGif&&(
+              <div style={{background:"#FFF7E5",border:`1px solid ${B.gold}55`,color:B.navy,borderRadius:14,padding:"10px 12px",fontSize:12,fontWeight:700,lineHeight:1.45,marginBottom:12}}>
+                No WorkoutX GIF match found yet. Showing the fallback placeholder for this exercise.
+              </div>
+            )}
             {demo.matchedName&&demo.matchedName!==demo.name&&(
               <div style={{fontSize:11,color:B.primary,fontWeight:800,marginBottom:10}}>Matched demo: {demo.matchedName}</div>
             )}
