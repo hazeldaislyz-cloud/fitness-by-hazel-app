@@ -316,6 +316,7 @@ function WorkoutTab(){
   const [checked,setChecked]=useState({});
   const [demo,setDemo]=useState(null);
   const [demoMap,setDemoMap]=useState({});
+  const [demoDebugMap,setDemoDebugMap]=useState({});
   const [demosLoading,setDemosLoading]=useState(false);
   const wk=WEEKS[wi]; const day=wk.days[di];
   const k=`${wi}-${di}`;
@@ -339,15 +340,46 @@ function WorkoutTab(){
       .then(res=>res.ok?res.json():Promise.reject(new Error("WorkoutX unavailable")))
       .then(data=>{
         console.log("[WorkoutX] /api/workoutx response", data);
-        if(active)setDemoMap(data.exercises||{});
+        if(active){
+          setDemoMap(data.exercises||{});
+          setDemoDebugMap(data.debug||{});
+        }
       })
       .catch(error=>{
         console.error("[WorkoutX] /api/workoutx failed", error);
-        if(active)setDemoMap({});
+        if(active){
+          setDemoMap({});
+          setDemoDebugMap({});
+        }
       })
       .finally(()=>{if(active)setDemosLoading(false);});
     return()=>{active=false;};
   },[wi,di,equip]);
+
+  const openDemo=({name,sets,reps,rest,cue,gif,matchedName,hasGif,debug})=>{
+    setDemo({name,sets,reps,rest,cue,gif,matchedName,hasGif,debug,manualDebug:null,debugLoading:true});
+    fetch(`/api/workoutx?name=${encodeURIComponent(name)}`)
+      .then(res=>res.ok?res.json():Promise.reject(new Error(`Debug request failed with HTTP ${res.status}`)))
+      .then(data=>{
+        console.log("[WorkoutX] manual debug response", data);
+        const detected=data.tests?.find(test=>test.detectedMediaUrl)?.detectedMediaUrl;
+        setDemo(prev=>prev?.name===name?{
+          ...prev,
+          gif: prev.hasGif ? prev.gif : detected || prev.gif,
+          hasGif: prev.hasGif || Boolean(detected),
+          manualDebug:data,
+          debugLoading:false,
+        }:prev);
+      })
+      .catch(error=>{
+        console.error("[WorkoutX] manual debug failed", error);
+        setDemo(prev=>prev?.name===name?{
+          ...prev,
+          manualDebug:{name,error:error?.message||String(error),tests:[]},
+          debugLoading:false,
+        }:prev);
+      });
+  };
 
   return(
     <div style={{paddingBottom:16}}>
@@ -439,7 +471,9 @@ function WorkoutTab(){
             const sets=getSets(ex.s);
             const cue=cueFor(ex);
             const match=demoMap[name];
-            const gif=match?.gifUrl||fallbackDemo(name);
+            const debug=demoDebugMap[name];
+            const detectedGif=match?.gifUrl||debug?.detectedGifUrl;
+            const gif=detectedGif||fallbackDemo(name);
             return(
               <div key={i} className={`exitem ${isDone?"done":""}`} onClick={()=>day.type!=="rest"&&toggle(i)}>
                 <div style={{display:"grid",gridTemplateColumns:"92px 1fr",gap:12,alignItems:"start"}}>
@@ -461,7 +495,7 @@ function WorkoutTab(){
                         {ex.r!=="—"&&<span className="metric-pill">{ex.r} reps</span>}
                         {ex.t&&ex.t!=="—"&&ex.t!==""&&<span className="metric-pill">{ex.t} rest</span>}
                       </div>
-                      <button className="demo-btn" onClick={(ev)=>{ev.stopPropagation();setDemo({name,sets,reps:ex.r,rest:ex.t,cue,gif,matchedName:match?.name,hasGif:Boolean(match?.gifUrl)});}}>Watch Demo</button>
+                      <button className="demo-btn" onClick={(ev)=>{ev.stopPropagation();openDemo({name,sets,reps:ex.r,rest:ex.t,cue,gif,matchedName:match?.name,hasGif:Boolean(detectedGif),debug});}}>Watch Demo</button>
                     </div>
                   </div>
                 </div>
@@ -500,8 +534,52 @@ function WorkoutTab(){
                 No WorkoutX GIF match found yet. Showing the fallback placeholder for this exercise.
               </div>
             )}
+            {demo.debug?.error&&(
+              <div style={{background:"#FEF2F2",border:"1px solid #FCA5A5",color:"#991B1B",borderRadius:14,padding:"10px 12px",fontSize:12,fontWeight:700,lineHeight:1.45,marginBottom:12}}>
+                WorkoutX error: {demo.debug.error}
+              </div>
+            )}
+            {demo.manualDebug?.error&&(
+              <div style={{background:"#FEF2F2",border:"1px solid #FCA5A5",color:"#991B1B",borderRadius:14,padding:"10px 12px",fontSize:12,fontWeight:700,lineHeight:1.45,marginBottom:12}}>
+                WorkoutX debug error: {demo.manualDebug.error}
+              </div>
+            )}
             {demo.matchedName&&demo.matchedName!==demo.name&&(
               <div style={{fontSize:11,color:B.primary,fontWeight:800,marginBottom:10}}>Matched demo: {demo.matchedName}</div>
+            )}
+            {import.meta.env.DEV&&demo.debug&&(
+              <div style={{background:B.surface,border:`1px solid ${B.border}`,borderRadius:16,padding:12,marginBottom:14}}>
+                <div className="brand" style={{fontSize:13,fontWeight:900,color:B.navy,marginBottom:8}}>WorkoutX Debug</div>
+                <div style={{fontSize:11,color:B.muted,lineHeight:1.6,marginBottom:8}}>
+                  <div><strong>Searched:</strong> {demo.debug.searchedExerciseName || "n/a"}</div>
+                  <div><strong>Status:</strong> {demo.debug.apiStatusCode ?? "n/a"}</div>
+                  <div><strong>Detected GIF URL:</strong> {demo.debug.detectedGifUrl || "none"}</div>
+                </div>
+                <pre style={{whiteSpace:"pre-wrap",wordBreak:"break-word",maxHeight:180,overflow:"auto",background:"#FFFFFF",border:`1px solid ${B.border}`,borderRadius:12,padding:10,fontSize:10,color:B.text}}>
+                  {JSON.stringify(demo.debug.rawWorkoutXResponse, null, 2)}
+                </pre>
+              </div>
+            )}
+            {import.meta.env.DEV&&(
+              <div style={{background:B.surface,border:`1px solid ${B.border}`,borderRadius:16,padding:12,marginBottom:14}}>
+                <div className="brand" style={{fontSize:13,fontWeight:900,color:B.navy,marginBottom:8}}>Manual Endpoint Test</div>
+                {demo.debugLoading&&<div style={{fontSize:12,color:B.muted}}>Loading raw WorkoutX responses...</div>}
+                {!demo.debugLoading&&demo.manualDebug?.tests?.map((test,index)=>(
+                  <div key={test.endpointUsed || index} style={{marginBottom:12}}>
+                    <div style={{fontSize:11,color:B.muted,lineHeight:1.6,marginBottom:8}}>
+                      <div><strong>Searched:</strong> {demo.manualDebug.name}</div>
+                      <div><strong>Endpoint:</strong> {test.endpointUsed}</div>
+                      <div><strong>Status:</strong> {test.apiStatusCode ?? "n/a"}</div>
+                      <div><strong>Detected Media URL:</strong> {test.detectedMediaUrl || "none"}</div>
+                      <div><strong>Detected Media Field:</strong> {test.detectedMediaField || "none"}</div>
+                      {test.error&&<div style={{color:"#991B1B"}}><strong>Error:</strong> {test.error}</div>}
+                    </div>
+                    <pre style={{whiteSpace:"pre-wrap",wordBreak:"break-word",maxHeight:180,overflow:"auto",background:"#FFFFFF",border:`1px solid ${B.border}`,borderRadius:12,padding:10,fontSize:10,color:B.text}}>
+                      {JSON.stringify(test.rawJson ?? test.rawText, null, 2)}
+                    </pre>
+                  </div>
+                ))}
+              </div>
             )}
             <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:12}}>
               {demo.sets!=="—"&&<span className="metric-pill">{demo.sets} sets</span>}

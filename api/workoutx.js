@@ -2,6 +2,7 @@ const API_BASE = "https://api.workoutxapp.com/v1";
 
 const STOP_WORDS = /\b(ss\d+|tabata|circuit|block \d+|amrap|finisher|superset|giant set)\b/gi;
 const EQUIPMENT_WORDS = /\b(barbell|dumbbell|dumbbells|db|dbs|band|banded|bands|bodyweight|weighted|bw|cable|machine|kettlebell)\b/gi;
+const MEDIA_FIELDS = ["gifUrl", "gif_url", "gif", "image", "imageUrl", "thumbnail", "mediaUrl", "video", "videoUrl", "url"];
 
 const MANUAL_QUERY_MAP = [
   [/bench press/i, "bench press"],
@@ -40,17 +41,6 @@ function cleanName(name) {
     .trim();
 }
 
-function getGifUrl(exercise) {
-  return exercise?.gifUrl
-    || exercise?.gif_url
-    || exercise?.gif
-    || exercise?.image
-    || exercise?.imageUrl
-    || exercise?.thumbnail
-    || exercise?.mediaUrl
-    || null;
-}
-
 function unwrapWorkoutXResponse(data) {
   if (Array.isArray(data)) return data;
   if (Array.isArray(data?.data)) return data.data;
@@ -58,6 +48,34 @@ function unwrapWorkoutXResponse(data) {
   if (Array.isArray(data?.results)) return data.results;
   if (data && typeof data === "object") return [data];
   return [];
+}
+
+function firstMediaField(value, path = "") {
+  if (!value) return null;
+  if (typeof value === "string" && /^https?:\/\//i.test(value)) {
+    return { field: path || "value", url: value };
+  }
+  if (Array.isArray(value)) {
+    for (let i = 0; i < value.length; i += 1) {
+      const found = firstMediaField(value[i], `${path}[${i}]`);
+      if (found) return found;
+    }
+    return null;
+  }
+  if (typeof value !== "object") return null;
+
+  for (const field of MEDIA_FIELDS) {
+    const found = firstMediaField(value[field], path ? `${path}.${field}` : field);
+    if (found) return found;
+  }
+
+  for (const [key, child] of Object.entries(value)) {
+    if (!/(gif|image|img|thumb|media|video|url)/i.test(key)) continue;
+    const found = firstMediaField(child, path ? `${path}.${key}` : key);
+    if (found) return found;
+  }
+
+  return null;
 }
 
 function scoreMatch(query, exercise) {
@@ -75,43 +93,121 @@ function scoreMatch(query, exercise) {
   return Math.round((overlap / Math.max(1, qTokens.size)) * 70);
 }
 
-async function searchWorkoutX(name, key) {
-  const candidates = [...new Set([cleanName(name), name])].filter(Boolean);
+async function fetchCandidate(originalName, candidate, key) {
+  const url = `${API_BASE}/exercises/name/${encodeURIComponent(candidate)}`;
+  const debug = {
+    searchedExerciseName: candidate,
+    originalExerciseName: originalName,
+    requestUrl: url,
+    apiStatusCode: null,
+    rawWorkoutXResponse: null,
+    detectedGifUrl: null,
+    detectedMediaField: null,
+    error: null,
+  };
 
-  for (const candidate of candidates) {
-    const url = `${API_BASE}/exercises/name/${encodeURIComponent(candidate)}`;
-    console.log("[WorkoutX] search", { original: name, candidate, url });
-    const res = await fetch(`${API_BASE}/exercises/name/${encodeURIComponent(candidate)}`, {
-      headers: { "X-WorkoutX-Key": key },
-    });
+  try {
+    console.log("[WorkoutX] search", { original: originalName, candidate, url });
+    const response = await fetch(url, { headers: { "X-WorkoutX-Key": key } });
+    debug.apiStatusCode = response.status;
+    const rawText = await response.text();
 
-    console.log("[WorkoutX] status", { candidate, status: res.status, ok: res.ok });
-    if (!res.ok) {
-      const body = await res.text().catch(() => "");
-      console.warn("[WorkoutX] non-ok response", { candidate, status: res.status, body: body.slice(0, 300) });
-      continue;
+    try {
+      debug.rawWorkoutXResponse = rawText ? JSON.parse(rawText) : null;
+    } catch {
+      debug.rawWorkoutXResponse = rawText;
     }
 
-    const data = await res.json();
-    const list = unwrapWorkoutXResponse(data);
-    console.log("[WorkoutX] response shape", {
+    console.log("[WorkoutX] raw response", {
       candidate,
-      isArray: Array.isArray(data),
-      topLevelKeys: data && typeof data === "object" ? Object.keys(data).slice(0, 12) : [],
-      count: list.length,
-      firstKeys: list[0] ? Object.keys(list[0]).slice(0, 16) : [],
-      firstMedia: getGifUrl(list[0]),
+      status: response.status,
+      ok: response.ok,
+      raw: debug.rawWorkoutXResponse,
     });
 
+    if (!response.ok) {
+      debug.error = `WorkoutX returned HTTP ${response.status}: ${rawText || response.statusText}`;
+      return { item: null, debug };
+    }
+
+    const list = unwrapWorkoutXResponse(debug.rawWorkoutXResponse);
     const ranked = list
-      .filter(item => getGifUrl(item))
-      .map(item => ({ item, score: scoreMatch(candidate, item) }))
+      .map(item => {
+        const media = firstMediaField(item);
+        return { item, media, score: scoreMatch(candidate, item) };
+      })
+      .filter(entry => entry.media?.url)
       .sort((a, b) => b.score - a.score);
 
-    if (ranked[0]?.score >= 30) return ranked[0].item;
+    const best = ranked[0] || null;
+    if (!best) {
+      const fallbackMedia = firstMediaField(debug.rawWorkoutXResponse);
+      debug.detectedGifUrl = fallbackMedia?.url || null;
+      debug.detectedMediaField = fallbackMedia?.field || null;
+      debug.error = "WorkoutX response did not include a detectable image/video/media URL.";
+      return { item: null, debug };
+    }
+
+    debug.detectedGifUrl = best.media.url;
+    debug.detectedMediaField = best.media.field;
+    return {
+      item: {
+        ...best.item,
+        gifUrl: best.media.url,
+        mediaField: best.media.field,
+        matchScore: best.score,
+      },
+      debug,
+    };
+  } catch (error) {
+    debug.error = error?.message || String(error);
+    console.error("[WorkoutX] request failed", debug);
+    return { item: null, debug };
+  }
+}
+
+async function fetchRawEndpoint(endpointUsed, key) {
+  const debug = {
+    endpointUsed,
+    apiStatusCode: null,
+    rawJson: null,
+    rawText: null,
+    detectedMediaUrl: null,
+    detectedMediaField: null,
+    error: null,
+  };
+
+  try {
+    const response = await fetch(endpointUsed, { headers: { "X-WorkoutX-Key": key } });
+    debug.apiStatusCode = response.status;
+    debug.rawText = await response.text();
+
+    try {
+      debug.rawJson = debug.rawText ? JSON.parse(debug.rawText) : null;
+      const media = firstMediaField(debug.rawJson);
+      debug.detectedMediaUrl = media?.url || null;
+      debug.detectedMediaField = media?.field || null;
+    } catch (error) {
+      debug.error = `Response was not valid JSON: ${error?.message || String(error)}`;
+    }
+  } catch (error) {
+    debug.error = error?.message || String(error);
   }
 
-  return null;
+  return debug;
+}
+
+async function searchWorkoutX(name, key) {
+  const candidates = [...new Set([cleanName(name), name])].filter(Boolean);
+  let lastDebug = null;
+
+  for (const candidate of candidates) {
+    const result = await fetchCandidate(name, candidate, key);
+    lastDebug = result.debug;
+    if (result.item) return result;
+  }
+
+  return { item: null, debug: lastDebug || { searchedExerciseName: name, originalExerciseName: name, error: "No search candidates were generated." } };
 }
 
 export default async function handler(req, res) {
@@ -119,49 +215,74 @@ export default async function handler(req, res) {
   console.log("[WorkoutX] key configured", { configured: Boolean(key), length: key?.length || 0 });
 
   if (!key) {
-    return res.status(200).json({ exercises: {}, missing: [], keyConfigured: false, error: "WorkoutX API key is not configured." });
+    return res.status(200).json({
+      exercises: {},
+      debug: {},
+      missing: [],
+      keyConfigured: false,
+      error: "WorkoutX API key is not configured.",
+    });
+  }
+
+  const singleName = String(req.query.name || "").trim();
+  if (singleName) {
+    const endpoints = [
+      `${API_BASE}/exercises?name=${encodeURIComponent(singleName)}`,
+      `${API_BASE}/exercises/name/${encodeURIComponent(singleName)}`,
+    ];
+    const tests = await Promise.all(endpoints.map(endpoint => fetchRawEndpoint(endpoint, key)));
+
+    console.log("[WorkoutX] manual endpoint test", {
+      name: singleName,
+      tests: tests.map(test => ({
+        endpointUsed: test.endpointUsed,
+        apiStatusCode: test.apiStatusCode,
+        error: test.error,
+        rawJson: test.rawJson,
+      })),
+    });
+
+    return res.status(200).json({
+      keyConfigured: true,
+      name: singleName,
+      tests,
+    });
   }
 
   const rawNames = String(req.query.names || "");
-  const names = rawNames.split("|").map(name => name.trim()).filter(Boolean).slice(0, 12);
+  const names = rawNames.split("|")
+    .map(name => name.trim())
+    .filter(Boolean)
+    .slice(0, 12);
+
   console.log("[WorkoutX] request names", names);
 
   if (!names.length) {
-    return res.status(200).json({ exercises: {}, missing: [], keyConfigured: true });
+    return res.status(200).json({ exercises: {}, debug: {}, missing: [], keyConfigured: true });
   }
 
   const entries = await Promise.all(names.map(async name => {
-    try {
-      const match = await searchWorkoutX(name, key);
-      if (!match) return [name, null];
-      const gifUrl = getGifUrl(match);
-      return [name, {
-        id: match.id,
-        name: match.name,
-        bodyPart: match.bodyPart,
-        target: match.target,
-        equipment: match.equipment,
-        gifUrl,
-        mediaField: Object.entries({
-          gifUrl: match.gifUrl,
-          gif_url: match.gif_url,
-          gif: match.gif,
-          image: match.image,
-          imageUrl: match.imageUrl,
-          thumbnail: match.thumbnail,
-          mediaUrl: match.mediaUrl,
-        }).find(([, value]) => value === gifUrl)?.[0],
-      }];
-    } catch (error) {
-      console.error("[WorkoutX] match failed", { name, message: error?.message });
-      return [name, null];
-    }
+    const { item, debug } = await searchWorkoutX(name, key);
+    if (!item) return [name, null, debug];
+    return [name, {
+      id: item.id,
+      name: item.name,
+      bodyPart: item.bodyPart,
+      target: item.target,
+      equipment: item.equipment,
+      gifUrl: item.gifUrl,
+      mediaField: item.mediaField,
+      matchScore: item.matchScore,
+    }, debug];
   }));
 
-  const exercises = Object.fromEntries(entries.filter(([, value]) => value?.gifUrl));
+  const exercises = Object.fromEntries(entries.filter(([, value]) => value?.gifUrl).map(([name, value]) => [name, value]));
+  const debug = Object.fromEntries(entries.map(([name,, value]) => [name, value]));
   const missing = entries.filter(([, value]) => !value?.gifUrl).map(([name]) => name);
-  console.log("[WorkoutX] proxy result", { matched: Object.keys(exercises), missing });
 
-  res.setHeader("Cache-Control", "s-maxage=86400, stale-while-revalidate=604800");
-  return res.status(200).json({ exercises, missing, keyConfigured: true });
+  console.log("[WorkoutX] proxy result", { matched: Object.keys(exercises), missing, debug });
+
+  res.setHeader("Cache-Control", "s-maxage=60, stale-while-revalidate=300");
+
+  return res.status(200).json({ exercises, debug, missing, keyConfigured: true });
 }
